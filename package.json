@@ -7,7 +7,8 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "test": "jest"
+    "test": "jest",
+    "testc": "jest --coverage"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.20.2",
