@@ -17,9 +17,12 @@ const customJestConfig: Config = {
             functions: 90,
             lines: 80,
         }
-    }
-
-
+    },
+    //ignore default stack code
+    coveragePathIgnorePatterns: [
+        'env.mjs',
+        'api/trpc.ts',
+    ],
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
