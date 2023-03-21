@@ -3,6 +3,7 @@ coverage
 .swc
 .env
 *.zip
+next-env.d.ts
 
 # ignore TeX build files and logs
 # doc/*.log
