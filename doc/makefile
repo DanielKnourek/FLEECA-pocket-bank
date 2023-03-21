@@ -1,12 +1,12 @@
-######################
-#      Makefile      #
-######################
-
-filename=main
+filename=manual-tul
+# filename=main
 
 pdf: 
-	xelatex ${filename}
-	xelatex ${filename}
+	latexmk ${filename}
+	latexmk ${filename}
+
+	# xelatex ${filename}
+	# xelatex ${filename}
 
 text: html
 	html2text -width 100 -style pretty ${filename}/${filename}.html | sed -n '/./,$$p' | head -n-2 >${filename}.txt
@@ -21,22 +21,18 @@ view:
 		${filename}; done
 
 clean:
-	rm -f ${filename}.{ps,pdf,log,aux,out,dvi,bbl,blg,snm,toc,nav}
+	rm -f ${filename}.{ps,pdf,log,aux,out,dvi,bbl,blg,snm,toc,nav,fdb*,fls,ind,idx,bcf,ilg}
 
 .PHONY: build
 build:
-	docker run --rm -v $(shell pwd):/data moss/xelatex make
+	docker run --rm --workdir='/data' -v $(shell pwd):/data texlive/texlive make
 	
 open:
-	docker run --rm -it -v $(shell pwd):/data moss/xelatex /bin/bash
+	docker run --rm -it -v $(shell pwd):/data texlive/texlive /bin/bash
 
-	# docker run --rm -it -v /home/daniel/dev/stin-projekt/doc:/data moss/xelatex /bin/bash
+	# docker run --rm -it -v /home/daniel/dev/stin-projekt/doc:/data texlive/texlive /bin/bash
 
-req: 
-	apt update
-	apt install python3-pip
-	apt install biblatex
+test:
+	docker run --rm -it --workdir='/data' -v $(shell pwd):/data texlive/texlive /bin/bash
 
-	apt install texlive-bibtex-extra
-
-open2
+	docker run --rm -it --workdir='/data' -v $(shell pwd):/data texlive/texlive /bin/bash

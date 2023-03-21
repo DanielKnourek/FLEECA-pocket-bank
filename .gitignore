@@ -3,3 +3,9 @@ coverage
 .swc
 .env
 *.zip
+
+# ignore TeX build files and logs
+# doc/*.log
+# doc/*.idx
+doc/aux/
+!doc/aux/manual-tul.pdf
