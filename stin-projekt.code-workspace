@@ -32,12 +32,6 @@
 			"--view",
 			"--shell-escape"
 		],
-
-		"ltex.enabled": [
-			"latex",
-			"markdown"
-		],
 		"cSpell.language": "cs",
-		"ltex.language": "sk-SK"
 	}
 }

@@ -26,12 +26,12 @@
 
 % vlastní příkazy
 \newcommand{\appName}{CirclesExchange}
-\newcommand{\appNameQ}{"\appName"}
+\newcommand{\appNameQ}{'\appName'}
 
 % extra balčíky
 
 \usepackage{polyglossia}
-\setdefaultlanguage{Czech} % comment when English is preferred
+\setdefaultlanguage{czech} % comment when English is preferred
 %\setdefaultlanguage{english} % comment when Czech is preferred
 
 
@@ -113,20 +113,20 @@
 % \end{abstractCZ}
 
 \begin{keywordsCZ}
-% TODO
-\LaTeX, třída, TUL
+    % TODO
+    \LaTeX, třída, TUL
 \end{keywordsCZ}
 
 \vspace{2cm}
 
 \begin{abstractEN}
-% TODO
-This report describes the \texttt{tulthesis} package for Technical university of
-Liberec thesis typesetting using the \LaTeX\ typographic system.
+    % TODO
+    This report describes the \texttt{tulthesis} package for Technical university of
+    Liberec thesis typesetting using the \LaTeX\ typographic system.
 \end{abstractEN}
 
 \begin{keywordsEN}
-\LaTeX, class, TUL
+    \LaTeX, class, TUL
 \end{keywordsEN}
 
 \clearpage
@@ -140,10 +140,10 @@ Liberec thesis typesetting using the \LaTeX\ typographic system.
 \clearpage
 
 \begin{abbrList}
-% TODO
-\textbf{TUL} & Technická univerzita v~Liberci \\
-\textbf{FM} & Fakulta mechatroniky, informatiky a mezioborových studií
-Technické univerzity v~Liberci
+    % TODO
+    \textbf{TUL} & Technická univerzita v~Liberci \\
+    \textbf{FM} & Fakulta mechatroniky, informatiky a mezioborových studií
+    Technické univerzity v~Liberci
 \end{abbrList}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DOCUMENT START %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -154,7 +154,7 @@ Tato část dokumentu udává jeho rozsah a přehled jeho obsahu. Také slouží
 Účelem tohoto dokumentu je poskytnutí detailně definovaných požadavků aplikace \appNameQ. Bude ilustrovat účel aplikace. Vysvětlí systémová omezení a potřebné zdroje k chodu. Tento dokument je primárně určen k tomu, aby byl zákazníkovi navržen ke schválení a také jako reference pro vývoj první verze systému.
 
 \section{Rozsah}
-Záměrem \appNameQ\hspace{1} je webová SPA, která umožní uživateli využívat jak svůj mobilní telefon tak i osobní počítač, jejím účelem je informovat uživatele o stavu jejich účtu a poskytnutí dostatečného počtu nástrojů pro manipulaci účtu a provádění transakcí mezi cizími uživateli.
+Záměrem \appNameQ{} je webová SPA, která umožní uživateli využívat jak svůj mobilní telefon tak i osobní počítač, jejím účelem je informovat uživatele o stavu jejich účtu a poskytnutí dostatečného počtu nástrojů pro manipulaci účtu a provádění transakcí mezi cizími uživateli.
 % TODO more ?
 
 \chapter{Specifikace požadavků}
@@ -166,7 +166,7 @@ Tato část obsahuje definici pro celé funkční chování aplikace a systémov
 
 \subsection{Uživatelský účet}
 
-Klient dále jako "uživatel", má přístup ke svému uživatelskému učtu a má možnost provádět tyto akce:
+Klient dále jako 'uživatel', má přístup ke svému uživatelskému učtu a má možnost provádět tyto akce:
 \begin{itemize}
     \item Vytvořit
     \item Upravit
@@ -175,20 +175,20 @@ Klient dále jako "uživatel", má přístup ke svému uživatelskému učtu a m
 Informace, které budou o uživateli uchovávány:
 \begin{itemize}
     \item Jméno a Příjmení
-        \begin{itemize}
-            \item Údaj uvedený při registraci.
-            \item typ: String
-        \end{itemize}
+          \begin{itemize}
+              \item Údaj uvedený při registraci.
+              \item typ: String
+          \end{itemize}
     \item Email
-        \begin{itemize}
-            \item Údaj uvedený při registraci.
-            \item typ: String
-        \end{itemize}
+          \begin{itemize}
+              \item Údaj uvedený při registraci.
+              \item typ: String
+          \end{itemize}
     \item Vlastněné účty
-        \begin{itemize}
-            \item Údaj upravený při vytvoření/smazaní bankovního účtu
-            \item typ: [String]
-        \end{itemize}
+          \begin{itemize}
+              \item Údaj upravený při vytvoření/smazaní bankovního účtu
+              \item typ: [String]
+          \end{itemize}
 \end{itemize}
 % TODO finish section
 
