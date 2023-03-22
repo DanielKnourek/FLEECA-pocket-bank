@@ -6,7 +6,4 @@ coverage
 next-env.d.ts
 
 # ignore TeX build files and logs
-# doc/*.log
-# doc/*.idx
 doc/aux/
-!doc/aux/manual-tul.pdf

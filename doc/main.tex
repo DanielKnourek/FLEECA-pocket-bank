@@ -10,7 +10,7 @@
 
 % ENGLISH EXPLANATION
 % \documentclass[FM,Dis,EN,fonts,bw]{tulthesis} % black and white typing, dissertation thesis at FM, written in English with using of TUL Mono font
-% this document uses packages specific for XeLaTeX and it is possible to 
+% this document uses packages specific for XeLaTeX and it is possible to
 % compile it by XeLaTeX only, if you haven't installed used (commercial) fonts
 % change them or erase commands \set...font in following rows
 % settings: FM (faculty: FS, FT, FP, EF, FA, FM, FZS a CXI), Dis (type of thesis: BP, DP, Teze, Autoref, Hab, SP, Proj), EN (written in English language), fonts (activation of TUL fonts), bw (black and white)
@@ -31,7 +31,7 @@
 % extra balčíky
 
 \usepackage{polyglossia}
-\setdefaultlanguage{czech} % comment when English is preferred
+\setdefaultlanguage{Czech} % comment when English is preferred
 %\setdefaultlanguage{english} % comment when Czech is preferred
 
 
@@ -71,7 +71,7 @@
 
 % Použití bibLateXu, pracuje s ISO stylem
 % BibLaTeX settings, works with ISO style
-\usepackage[ 
+\usepackage[
     backend=biber
     % ,style=iso-authoryear % styl vyžaduje FZS TUL , místo příkazu \cite{} je potřeba využít \parencite{} (sazba kulatých závorek) / style required by FZS TUL use \parencite{} instead of \cite{}
     ,style=iso-numeric
@@ -88,18 +88,18 @@
 % Úprava iso-numeric.bbx v souladu s požadavky TUL hranaté závorky v číslovaném seznamu / Modification of iso-numeric.bbx in accordance with TUL requirements of square brackets in a numbered list
 \DeclareFieldFormat{labelnumberwidth}{\mkbibbrackets{#1}}
 
-% Formátování podle pokynů FZS, při využití stylu iso-authoryear, čárka mezi jmény a poslední jméno se spojkou a / special requirements of FZS TUL 
+% Formátování podle pokynů FZS, při využití stylu iso-authoryear, čárka mezi jmény a poslední jméno se spojkou a / special requirements of FZS TUL
 \DeclareDelimFormat{multinamedelim}{\addcomma\space}
 
 \DeclareDelimFormat{finalnamedelim}{%
   \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
   \addspace\bibstring{and}\space}
 
-\DeclareNameAlias{author}{family-given/given-family} 
+\DeclareNameAlias{author}{family-given/given-family}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{csquotes} %užití biblatexu hlasí warnings, důvodem může být použití českých uvozovek v citacích! / solving of problems with Czech quotations
-\urlstyle{same} %sazba url odkazů stejným fontem jako ostatní text, řešení problémů v zalamování hypertextových odkazů v citacích / url in references setting into the same form as text 
+\urlstyle{same} %sazba url odkazů stejným fontem jako ostatní text, řešení problémů v zalamování hypertextových odkazů v citacích / url in references setting into the same form as text
 
 
 \begin{document}
@@ -148,13 +148,13 @@ Technické univerzity v~Liberci
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DOCUMENT START %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Úvod}
-Tato část dokumentu udává jeho rozah a přehled jeho obsahu. Také slouží pro definování jeho účelu a záměru.
+Tato část dokumentu udává jeho rozsah a přehled jeho obsahu. Také slouží pro definování jeho účelu a záměru.
 
 \section{Účel}
 Účelem tohoto dokumentu je poskytnutí detailně definovaných požadavků aplikace \appNameQ. Bude ilustrovat účel aplikace. Vysvětlí systémová omezení a potřebné zdroje k chodu. Tento dokument je primárně určen k tomu, aby byl zákazníkovi navržen ke schválení a také jako reference pro vývoj první verze systému.
 
 \section{Rozsah}
-Záměrem \appNameQ\hspace{0} je webová SPA, která umožní uživateli využívat jak svůj mobilní telefon tak i osobní počítač, jejím účelem je informovat uživatele o stavu jejich účtu a poskytnutí dostatečného počtu nástrojů pro manipulaci účtu a provádění transakcí mezi cizími uživateli.
+Záměrem \appNameQ\hspace{1} je webová SPA, která umožní uživateli využívat jak svůj mobilní telefon tak i osobní počítač, jejím účelem je informovat uživatele o stavu jejich účtu a poskytnutí dostatečného počtu nástrojů pro manipulaci účtu a provádění transakcí mezi cizími uživateli.
 % TODO more ?
 
 \chapter{Specifikace požadavků}
@@ -172,9 +172,9 @@ Klient dále jako "uživatel", má přístup ke svému uživatelskému učtu a m
     \item Upravit
     \item Smazat  (Uzavřít účet)
 \end{itemize}
-Informace, které budou o uživateli uchovávany:
+Informace, které budou o uživateli uchovávány:
 \begin{itemize}
-    \item Jméno a Přijmení
+    \item Jméno a Příjmení
         \begin{itemize}
             \item Údaj uvedený při registraci.
             \item typ: String
@@ -208,21 +208,40 @@ Uživatel bude moci kdykoli změnit své jméno.
 
 \subsubsection{Smazat}
 
-Uživatel bude moci smazat, neboli uzavřít uživatelský účet.
+Uživatel bude moci smazat, neboli uzavřít, uživatelský účet.
 
 \subsection{Bankovní účet}
-Každý uživatel má přiřazené bankovní pčty se kterými může manipulovat. 
+Každý uživatel má přiřazené bankovní účty se kterými může manipulovat. Účet může uživatel kdykoliv vytvořit. Nový uživatel je vyzván si účet vytvořit.
+S bankovním účtem lze provádět operace:
+\begin{itemize}
+    \item Vytvořit
+    \item Upravit
+    \item Uzavřít (smazat)
+    \item Převod financí
+    \item Vklad financí
+\end{itemize}
 
+Informace, které budou o bankovním účtu uchovávány:
+\begin{itemize}
+    \item Vlastník
+    \item Měna
+    \item Zůstatek
+    \item Číslo účtu
+
+\end{itemize}
+
+\subsubsection{Vytvořit}
+Uživatel má možnost vytvářet bankovní účty. Při vytváření je dotázán na měnu ve které bude účet veden
 
 % TODO cite file?
 \nocite{*}
-% Aplikace biblatexu a stylu citování ČSN ISO 690, 
-% soubor refPsaniTextuNEW.bib je vložen v hlavičce dokumentu
+% Aplikace biblatexu a stylu citování ČSN ISO 690,
+% soubor refPsaniTextuNEW.bib je vložen v hlavičce dokumentů
 
-\printbibliography[title={Použitá literatura}] % sazba seznamu citací 
-% \printbibliography[title={References}] 
+\printbibliography[title={Použitá literatura}] % sazba seznamu citací
+% \printbibliography[title={References}]
 \addcontentsline{toc}{chapter}{Použitá literatura} % vložení nadpisu do obsahu
-% \addcontentsline{toc}{chapter}{References} 
+% \addcontentsline{toc}{chapter}{References}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -231,7 +250,7 @@ Každý uživatel má přiřazené bankovní pčty se kterými může manipulova
 
 % \appendix % začátek příloh / beginning of appendiecies
 % \chapter{Přílohy}
-% \section{Obsah vloženého balíku do IS/STAG TUL} % příklad přílohy 
+% \section{Obsah vloženého balíku do IS/STAG TUL} % příklad přílohy
 % \begin{itemize}
 %     \item Text práce
 %     \item Obrazová dokumentace
@@ -239,6 +258,6 @@ Každý uživatel má přiřazené bankovní pčty se kterými může manipulova
 %     \item \dots
 % \end{itemize}
 
-% \section{Velké tabulky a obrázky} % příklad přílohy 
+% \section{Velké tabulky a obrázky} % příklad přílohy
 
 \end{document}

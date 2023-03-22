@@ -1,9 +1,9 @@
-filename=manual-tul
-# filename=main
+filename=main
 
 pdf: 
 	latexmk ${filename}
 	latexmk ${filename}
+	mv aux/*.pdf ./
 
 text: html
 	html2text -width 100 -style pretty ${filename}/${filename}.html | sed -n '/./,$$p' | head -n-2 >${filename}.txt
@@ -18,7 +18,7 @@ view:
 		${filename}; done
 
 clean:
-	rm -f ${filename}.{ps,pdf,log,aux,out,dvi,bbl,blg,snm,toc,nav,fdb*,fls,ind,idx,bcf,ilg}
+	rm -f aux/${filename}.{ps,pdf,log,aux,out,dvi,bbl,blg,snm,toc,nav,fdb*,fls,ind,idx,bcf,ilg}
 
 .PHONY: build
 build:

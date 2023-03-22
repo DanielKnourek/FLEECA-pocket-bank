@@ -1,0 +1,14 @@
+{
+    "name": "TeX Live base",
+    "dockerFile": "texlive.dockerfile",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "james-yu.latex-workshop",
+                "tecosaur.latex-utilities",
+                "yzhang.markdown-all-in-one",
+                "valentjn.vscode-ltex"
+            ]
+        }
+    }
+}
