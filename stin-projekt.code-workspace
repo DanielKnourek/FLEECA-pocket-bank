@@ -23,6 +23,8 @@
 		"latex-workshop.latex.clean.subfolder.enabled": true,
 		"latex-workshop.latex.autoClean.run":"onFailed",
 		"latex-workshop.latex.autoBuild.run": "onSave",
+		"latex-workshop.latex.recipe.default": "first",
+		"latex-workshop.latex.outDir": "aux",
 		"latex-workshop.latex.external.build.args": [
 			"--shell-escape"
 		],
@@ -30,5 +32,12 @@
 			"--view",
 			"--shell-escape"
 		],
+
+		"ltex.enabled": [
+			"latex",
+			"markdown"
+		],
+		"cSpell.language": "cs",
+		"ltex.language": "sk-SK"
 	}
 }
