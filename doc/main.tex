@@ -29,6 +29,8 @@
 \newcommand{\appNameQ}{'\appName'}
 
 % extra balčíky
+\usepackage{numprint}
+\usepackage{hyperref}
 
 \usepackage{polyglossia}
 \setdefaultlanguage{czech} % comment when English is preferred
@@ -98,7 +100,7 @@
 \DeclareNameAlias{author}{family-given/given-family}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage{csquotes} %užití biblatexu hlasí warnings, důvodem může být použití českých uvozovek v citacích! / solving of problems with Czech quotations
+\usepackage{csquotes} %užití biblatexu hlásí warnings, důvodem může být použití českých uvozovek v citacích! / solving of problems with Czech quotations
 \urlstyle{same} %sazba url odkazů stejným fontem jako ostatní text, řešení problémů v zalamování hypertextových odkazů v citacích / url in references setting into the same form as text
 
 
@@ -112,24 +114,24 @@
 % Technické univerzity v~Liberci pomocí typografického systému \LaTeX.
 % \end{abstractCZ}
 
-\begin{keywordsCZ}
-    % TODO
-    \LaTeX, třída, TUL
-\end{keywordsCZ}
+% \begin{keywordsCZ}
+%     % TODO
+%     \LaTeX, třída, TUL
+% \end{keywordsCZ}
 
-\vspace{2cm}
+% \vspace{2cm}
 
-\begin{abstractEN}
-    % TODO
-    This report describes the \texttt{tulthesis} package for Technical university of
-    Liberec thesis typesetting using the \LaTeX\ typographic system.
-\end{abstractEN}
+% \begin{abstractEN}
+%     % TODO
+%     This report describes the \texttt{tulthesis} package for Technical university of
+%     Liberec thesis typesetting using the \LaTeX\ typographic system.
+% \end{abstractEN}
 
-\begin{keywordsEN}
-    \LaTeX, class, TUL
-\end{keywordsEN}
+% \begin{keywordsEN}
+%     \LaTeX, class, TUL
+% \end{keywordsEN}
 
-\clearpage
+% \clearpage
 
 % \begin{acknowledgement}
 % Rád bych poděkoval všem, kteří přispěli ke vzniku tohoto dílka.
@@ -139,12 +141,12 @@
 
 \clearpage
 
-\begin{abbrList}
-    % TODO
-    \textbf{TUL} & Technická univerzita v~Liberci \\
-    \textbf{FM} & Fakulta mechatroniky, informatiky a mezioborových studií
-    Technické univerzity v~Liberci
-\end{abbrList}
+% \begin{abbrList}
+%     % TODO
+%     \textbf{TUL} & Technická univerzita v~Liberci \\
+%     \textbf{FM} & Fakulta mechatroniky, informatiky a mezioborových studií
+%     Technické univerzity v~Liberci
+% \end{abbrList}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DOCUMENT START %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Úvod}
@@ -194,10 +196,10 @@ Informace, které budou o uživateli uchovávány:
 
 \subsubsection{Vytvořit}
 
-Nový uživatel má možnost vytvořit vlastní účet. Při vytváření nového účtu je třeba při registraci zadat Jméno, Přijmení, email a výchozí měnu.
+Nový uživatel má možnost vytvořit vlastní účet. Při vytváření nového účtu je třeba při registraci zadat Jméno, Příjmení, email a výchozí měnu.
 Při úspěšném vytvoření uživateli bude přidělen nový výchozí účet a jeho číslo nového účtu.
 
-Při vytváření lze využít existující účet 3. strany (google, discord), v takovém případě se při vytváření účtu pokusí doplnit informace které 3. strana poskytuje, ale dovolí uživateli dokončit registraci s vlastnímí údaji.
+Při vytváření lze využít existující účet 3. strany (google, discord), v takovém případě se při vytváření účtu pokusí doplnit informace které 3. strana poskytuje, ale dovolí uživateli dokončit registraci s vlastními údaji.
 
 % TODO check this paragraph. move it to proper place
 Vzhledem k povaze této aplikace jako online služba a její závislost na online identitě jako je email, je využití registrace a přihlášení pomocí 3. strany bude jako jediný podporovaný způsob vedení účtu mimo přihlášení pod demo a testovací účet.
@@ -215,32 +217,140 @@ Každý uživatel má přiřazené bankovní účty se kterými může manipulov
 S bankovním účtem lze provádět operace:
 \begin{itemize}
     \item Vytvořit
-    \item Upravit
     \item Uzavřít (smazat)
     \item Převod financí
     \item Vklad financí
+    \item Historie transakcí
 \end{itemize}
 
 Informace, které budou o bankovním účtu uchovávány:
 \begin{itemize}
     \item Vlastník
+          \begin{itemize}
+              \item Vlastník účtu
+              \item typ: String
+          \end{itemize}
     \item Měna
+          \begin{itemize}
+              \item Měna ve které je účet veden
+              \item typ: String
+          \end{itemize}
+          \clearpage % TODO quickfix remove later
     \item Zůstatek
+          \begin{itemize}
+              \item Aktuální stav účtu
+              \item typ: Int
+              \item max/min +-\numprint{1000000000} (1 Bilion)
+          \end{itemize}
     \item Číslo účtu
+        \begin{itemize}
+            \item Číslo účtu
+            \item typ: String
+        \end{itemize}
+\end{itemize}
+Informace, které budou o transakcích uchovávány:
+\begin{itemize}
+    \item Číslo účtu odesílatele
+          \begin{itemize}
+              \item Číslo účtu, který je odesílatel
+              \item typ: String
+          \end{itemize}
+    \item Číslo účtu příjemce
+          \begin{itemize}
+              \item Číslo účtu, který je příjemce
+              \item typ: String
+          \end{itemize}
+    \item Částka před transakcí
+          \begin{itemize}
+              \item Částka převodu
+              \item typ: Int
+          \end{itemize}
+    \item Měna před transakcí
+          \begin{itemize}
+              \item Měna převodu
+              \item typ: String
+          \end{itemize}
+    \item Částka po transakci
+          \begin{itemize}
+              \item Částka převodu
+              \item typ: Int
+          \end{itemize}
+    \item Měna po transakci
+          \begin{itemize}
+              \item Měna převodu
+              \item typ: String
+          \end{itemize}
+    \item Timestamp
+          \begin{itemize}
+              \item Časová značka převodu
+              \item typ: Timestamp
+          \end{itemize}
 
 \end{itemize}
 
 \subsubsection{Vytvořit}
-Uživatel má možnost vytvářet bankovní účty. Při vytváření je dotázán na měnu ve které bude účet veden
+Uživatel má možnost vytvářet bankovní účty. Při vytváření je dotázán na měnu ve které bude účet veden. Uživateli je vytvořen výchozí účet společně s provedením úspěšné registrace.
+
+\subsubsection{Uzavřít}
+Bankovní účet lze uzavřít pouze pokud je zůstatek 0.
+
+\subsubsection{Převod financí}
+Vlastník účtu může provádět převody mezi svými i cizími účty. Při převodu je třeba zadat číslo účtu, který obdrží finance a částku kolik se má převést. Měna převodu je vždy měna účtu, který převádí. Pokud účet má zůstatek v jiné měně, je převod proveden pomocí aktuálního kurzu.
+
+\subsubsection{Vklad financí}
+Je speciální typ převodu, který se provádí na vlastní účet. Při vkladu je třeba zadat částku kolik se má převést.
+
+\subsubsection{Historie transakcí}
+Všechny změny zůstatku jednoho či více účtů jsou považovány jako transakce. Provedené transakce jsou uchovávány pro účely archivní historie. Uživatel má možnost zobrazit historii transakcí jednoho či více účtů, které jsou k němu přiřazeny.
+
+\section{Požadavky aplikace}
+
+
+
+\subsection{Požadavky na frontend}
+Klient aplikace pro uživatele má následující požadavky
+\begin{itemize}
+    \item moderní webový prohlížeč podporující ES5.
+    \item konektivita na internet
+\end{itemize}
+
+\subsection{Požadavky na backend}
+Backend aplikace má následující požadavky
+\begin{itemize}
+    \item Docker prostředí schopné pustit více kontejnerů
+    \item konektivita na internet
+\end{itemize}
+
+\subsection{Požadavky na externí data}
+Pro funkčnost aplikace je zapotřebí externí data.
+Tyto data jsou:
+
+\begin{itemize}
+    \item Kurzy měn
+          \begin{itemize}
+              \item Kurzy měn ČNB
+              \item zdroj: \href{https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt}{cnb.cz}
+              \item formát: CSV
+                    hlavička: země|měna|množství|kód|kurz
+          \end{itemize}
+\end{itemize}
+
+Bez těchto dat nelze provádět převody mezi měnami.
+
+\subsection{Kvalita Softwaru}
+Aby byl snížen počet chyb v kódu a aplikace byla co nejvíce spolehlivá a bezpečná, bude využit automatizační prostředek Github Actions pro kontejnerizační platformu Docker. Tento prostředek bude spouštět testy a statickou analýzu kódu. Testy budou spouštěny při každém Testy a statická analýza bude spouštěna při každém vydání nové verze. Testy budou spouštěny pomocí frameworku Jest. Statická analýza bude spouštěna pomocí nástroje SonarQube.
+
+\section{Vývoj a cena}
+Vzhledem k vyžádaným platformám a požadavků aplikace je doba vývoje odhadována na 6 týdnů. Čistá práce je odhadována na 90 hodin komulativního času všech vývojářů. Cena aplikace je odhadována na 37 125Kč
 
 % TODO cite file?
 \nocite{*}
 % Aplikace biblatexu a stylu citování ČSN ISO 690,
 % soubor refPsaniTextuNEW.bib je vložen v hlavičce dokumentů
 
-\printbibliography[title={Použitá literatura}] % sazba seznamu citací
+% \printbibliography[title={Použitá literatura}] % sazba seznamu citací
 % \printbibliography[title={References}]
-\addcontentsline{toc}{chapter}{Použitá literatura} % vložení nadpisu do obsahu
+% \addcontentsline{toc}{chapter}{Použitá literatura} % vložení nadpisu do obsahu
 % \addcontentsline{toc}{chapter}{References}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
