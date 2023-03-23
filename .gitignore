@@ -42,3 +42,7 @@ yarn-error.log*
 *.tsbuildinfo
 
 .swc
+
+# ignore TeX build files and logs
+doc/aux/*
+!doc/aux/*.pdf
