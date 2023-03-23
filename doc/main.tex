@@ -25,10 +25,10 @@
 \newcommand{\verze}{2.0}
 
 % vlastní příkazy
-\newcommand{\appName}{CirclesExchange}
+\newcommand{\appName}{FLEECA pocket bank}
 \newcommand{\appNameQ}{'\appName'}
 
-% extra balčíky
+% extra balíčky
 \usepackage{numprint}
 \usepackage{hyperref}
 
@@ -156,7 +156,7 @@ Tato část dokumentu udává jeho rozsah a přehled jeho obsahu. Také slouží
 Účelem tohoto dokumentu je poskytnutí detailně definovaných požadavků aplikace \appNameQ. Bude ilustrovat účel aplikace. Vysvětlí systémová omezení a potřebné zdroje k chodu. Tento dokument je primárně určen k tomu, aby byl zákazníkovi navržen ke schválení a také jako reference pro vývoj první verze systému.
 
 \section{Rozsah}
-Záměrem \appNameQ{} je webová SPA, která umožní uživateli využívat jak svůj mobilní telefon tak i osobní počítač, jejím účelem je informovat uživatele o stavu jejich účtu a poskytnutí dostatečného počtu nástrojů pro manipulaci účtu a provádění transakcí mezi cizími uživateli.
+Záměrem \appNameQ{} je moderní webová aplikace, která umožní uživateli využívat jak svůj mobilní telefon tak i osobní počítač, jejím účelem je informovat uživatele o stavu jejich účtu a poskytnutí dostatečného počtu nástrojů pro manipulaci účtu a provádění transakcí mezi cizími uživateli.
 % TODO more ?
 
 \chapter{Specifikace požadavků}
@@ -243,10 +243,10 @@ Informace, které budou o bankovním účtu uchovávány:
               \item max/min +-\numprint{1000000000} (1 Bilion)
           \end{itemize}
     \item Číslo účtu
-        \begin{itemize}
-            \item Číslo účtu
-            \item typ: String
-        \end{itemize}
+          \begin{itemize}
+              \item Číslo účtu
+              \item typ: String
+          \end{itemize}
 \end{itemize}
 Informace, které budou o transakcích uchovávány:
 \begin{itemize}
