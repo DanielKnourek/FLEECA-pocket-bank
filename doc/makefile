@@ -13,22 +13,19 @@ html:
 
 view:
 	while inotifywait --event modify,move_self,close_write ${filename}.tex; \
-		do xelatex -halt-on-error ${filename} &&   xelatex -halt-on-error \
+		do latexmk -halt-on-error ${filename} &&   latexmk -halt-on-error \
 		${filename}; done
 
 clean:
 	rm -f aux/${filename}.{ps,pdf,log,aux,out,dvi,bbl,blg,snm,toc,nav,fdb*,fls,ind,idx,bcf,ilg}
 
 .PHONY: build
-build:
-	docker run --rm --workdir='/data' -v $(shell pwd):/data texlive/texlive make
-	
+build: 
+	docker run --rm --workdir='/data' -v $(shell pwd):/data texlive-tul make
+
+.PHONY: buildcontainer
+buildcontainer:
+	docker build -t texlive-tul -f texlive.dockerfile ../.devcontainer
+
 open:
-	docker run --rm -it -v $(shell pwd):/data texlive/texlive /bin/bash
-
-	# docker run --rm -it -v /home/daniel/dev/stin-projekt/doc:/data texlive/texlive /bin/bash
-
-test:
-	docker run --rm -it --workdir='/data' -v $(shell pwd):/data texlive/texlive /bin/bash
-
-	docker run --rm -it --workdir='/data' -v $(shell pwd):/data texlive/texlive /bin/bash
+	docker run --rm -it -v $(shell pwd):/data texlive-tul /bin/bash
