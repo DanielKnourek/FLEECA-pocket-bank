@@ -8,3 +8,9 @@ next-env.d.ts
 # ignore TeX build files and logs
 doc/aux/*
 !doc/aux/*.pdf
+
+# webapp build files
+.next
+.swccoverage
+next-env.d.ts
+__test__
