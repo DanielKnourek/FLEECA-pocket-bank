@@ -369,10 +369,10 @@ Důvodem může být výpadek na straně ČNB, chybný formát stahovaného csv 
 \subsection{Výpadek služby Vercel}
 Služba Vercel poskytuje hosting a zařizuje správu webového serveru a databáze. V případě výpadku na straně služeb, které společnost Vercel poskytuje je třeba kontaktovat a zjistit, zda se jedná trvalý problém nebo mimořádný výpadek. Vercel má avšak repliky dat i serverů po celém světě s výbornou historií o zacházení dat svých klientů.
 
-V případě nepoužívání aplikace se aplikace vypíná pro ušetření výpočetních zdrojů a v takovémto případě nový požadavek na webové rozhraní zažádá o tzv. cold start aplikace u který trvá přibližně 1-3s než bude schopný hosting odeslat odpověď uživateli. Další dotazy by neměli být nějak omezované.
+V případě nepoužívání aplikace se aplikace vypíná pro ušetření výpočetních zdrojů. V takovémto případě nový požadavek na webové rozhraní zažádá o tzv. cold start aplikace, který trvá přibližně 1-3s než bude schopný hosting odeslat odpověď uživateli. Další dotazy by neměli být nijak omezované.
 
 \subsection{Platba z účtu, který nemá dostatek financí}
-V případě platby z účtu, který nemá dostatek financí, bude nabídnuto zda uživatel chce použít další účet, který může být v jiné měně.
+V případě platby z účtu, který nemá dostatek financí, bude nabídnuto zda uživatel chce použít další účet, který může být v jiné měně. Poté provede platbu s případným převodem měn z vybraných účtů.
 
 \section{Vývoj a cena}
 Vzhledem k vyžádaným platformám a požadavků aplikace je doba vývoje odhadována na 6 týdnů. Čistá práce je odhadována na 90 hodin komulativního času všech vývojářů. Cena aplikace je odhadována na 37 125Kč
@@ -387,7 +387,6 @@ Vzhledem k vyžádaným platformám a požadavků aplikace je doba vývoje odhad
 % \addcontentsline{toc}{chapter}{Použitá literatura} % vložení nadpisu do obsahu
 % \addcontentsline{toc}{chapter}{References}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 \renewcommand{\indexname}{Přehled příkazů, prostředí a voleb}
 \printindex
