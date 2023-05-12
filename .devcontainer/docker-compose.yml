@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: app.dockerfile
+
+    volumes:
+      - ../:/workspaces/frontend:cached
+      
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:db
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+# lowercase db
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: fleeca
+      POSTGRES_PASSWORD: ff123456
+      POSTGRES_DB: fleeca_pb
+
+  # db:
+  #   image: postgres:15
+  #   restart: unless-stopped
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_USER: Fleeca
+  #     POSTGRES_PASSWORD: Ff123456
+  #     POSTGRES_DB: FLEECA_PB
+
+    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - 8088:80
+
+  # sqlpad:
+  #   image: sqlpad/sqlpad:5
+  #   ports:
+  #     - 8088:3000
+  #   environment:
+  #     SQLPAD_ADMIN: 'admin@sqlpad.com'
+  #     SQLPAD_ADMIN_PASSWORD: 'admin'
+
+  # db_adminer:
+  #   image: adminer:4.8.1
+  #   restart: unless-stopped
+  #   ports:
+  #     - 8088:8080
+  #   environment:
+  #     ADMINER_DEFAULT_SERVER: db
+  #     ADMINER_DESIGN: hydra
+
+volumes:
+  postgres-data:
