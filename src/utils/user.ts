@@ -1,4 +1,4 @@
-import { db, sql } from "@vercel/postgres";
+import { createClient, db, sql } from "@vercel/postgres";
 import { z } from "zod";
 
 
@@ -6,6 +6,9 @@ const insertUser = async () => {
     // const SQLenvSchema = z.object({
     //     POSTGRES_DATABASE: z.string()
     // });
+    const client = createClient();
+    await client.connect();
+    
     const KeyMatcher = z.string().startsWith("POSTGRES").catch(() => {
         return "null"
     })
