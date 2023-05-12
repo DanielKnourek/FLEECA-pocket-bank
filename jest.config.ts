@@ -11,6 +11,12 @@ const customJestConfig: Config = {
     // Add more setup options before each test is run
     // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 
+    moduleDirectories: ['node_modules', 'src'],
+    moduleNameMapper: {
+        '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
+        '^@/utils/(.*)$': '<rootDir>/src/utils/$1',
+        '^@/server/(.*)$': '<rootDir>/src/server/$1',
+    },
     collectCoverageFrom: ['./src/**'],
     coverageThreshold: {
         global: {
@@ -23,6 +29,7 @@ const customJestConfig: Config = {
         'env.mjs',
         'api/trpc.ts',
     ],
+    testEnvironment: 'jest-environment-jsdom',
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
