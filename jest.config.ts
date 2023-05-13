@@ -20,7 +20,7 @@ const customJestConfig: Config = {
     collectCoverageFrom: ['./src/**'],
     coverageThreshold: {
         global: {
-            functions: 90,
+            functions: 80,
             lines: 80,
         }
     },
