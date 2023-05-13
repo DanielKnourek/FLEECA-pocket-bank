@@ -13,7 +13,7 @@ services:
     command: sleep infinity
 
     # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:db
+    network_mode: service:pgpool
 
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
     # (Adding the "ports" property to this file will not forward from a Codespace.)
@@ -21,6 +21,9 @@ services:
 # lowercase db
   db:
     image: postgres:15
+    # build: 
+    #   context: .
+    #   dockerfile: db.dockerfile
     restart: unless-stopped
     volumes:
       - postgres-data:/var/lib/postgresql/data
@@ -29,15 +32,19 @@ services:
       POSTGRES_PASSWORD: ff123456
       POSTGRES_DB: fleeca_pb
 
-  # db:
-  #   image: postgres:15
-  #   restart: unless-stopped
-  #   volumes:
-  #     - postgres-data:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_USER: Fleeca
-  #     POSTGRES_PASSWORD: Ff123456
-  #     POSTGRES_DB: FLEECA_PB
+  pgpool:
+    image: bitnami/pgpool:4
+    ports:
+      - 5432:5432
+    environment:
+      - PGPOOL_BACKEND_NODES=0:db:5432
+      - PGPOOL_SR_CHECK_USER=customuser
+      - PGPOOL_SR_CHECK_PASSWORD=custompassword
+      - PGPOOL_ENABLE_LDAP=no
+      - PGPOOL_POSTGRES_USERNAME=fleeca
+      - PGPOOL_POSTGRES_PASSWORD=ff123456
+      - PGPOOL_ADMIN_USERNAME=admin
+      - PGPOOL_ADMIN_PASSWORD=adminpassword
 
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
