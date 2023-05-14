@@ -1,12 +1,14 @@
 {
-  "name": "my-t3-app",
-  "version": "0.1.0",
+  "name": "fleeca-pocket-bank",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "test": "IS_TEST=true vitest",
+    "testc": "vitest run --coverage"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.2.1",
@@ -15,6 +17,9 @@
     "@trpc/next": "^10.18.0",
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
+    "@vercel/postgres": "^0.3.0",
+    "@vercel/postgres-kysely": "^0.3.0",
+    "kysely": "^0.24.2",
     "next": "^13.4.1",
     "next-auth": "^4.21.0",
     "react": "18.2.0",
@@ -23,6 +28,8 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
     "@types/eslint": "^8.21.3",
     "@types/node": "^18.15.5",
     "@types/prettier": "^2.7.2",
@@ -30,14 +37,21 @@
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "@vitest/coverage-c8": "^0.31.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.36.0",
     "eslint-config-next": "^13.4.1",
+    "eslint-plugin-jest-dom": "^4.0.3",
+    "git-conventional-commits": "^2.6.3",
+    "jsdom": "^22.0.0",
     "postcss": "^8.4.21",
     "prettier": "^2.8.6",
     "prettier-plugin-tailwindcss": "^0.2.6",
     "tailwindcss": "^3.3.0",
-    "typescript": "^5.0.2"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2",
+    "vitest": "^0.31.0"
   },
   "ct3aMetadata": {
     "initVersion": "7.13.0"

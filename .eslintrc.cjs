@@ -18,8 +18,8 @@ const config = {
   parserOptions: {
     project: path.join(__dirname, "tsconfig.json"),
   },
-  plugins: ["@typescript-eslint"],
-  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
+  plugins: ["@typescript-eslint", "jest-dom"],
+  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended", "plugin:jest-dom/recommended"],
   rules: {
     "@typescript-eslint/consistent-type-imports": [
       "warn",
@@ -29,6 +29,10 @@ const config = {
       },
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "jest-dom/prefer-checked": "error",
+    "jest-dom/prefer-enabled-disabled": "error",
+    "jest-dom/prefer-required": "error",
+    "jest-dom/prefer-to-have-attribute": "error",
   },
 };
 

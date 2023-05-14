@@ -1,4 +1,4 @@
-import { Config } from 'jest'
+import { describe, it, expect } from 'vitest'
 
 describe('Demo tests', () => {
     it('test: is equal', () => {

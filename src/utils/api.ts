@@ -10,6 +10,7 @@ import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 
 import { type AppRouter } from "@/server/api/root";
+import { createTRPCReact } from "@trpc/react-query";
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return ""; // browser should use relative url
@@ -17,8 +18,8 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
-/** A set of type-safe react-query hooks for your tRPC API. */
-export const api = createTRPCNext<AppRouter>({
+// tRPC config
+const tRPCconfig = {
   config() {
     return {
       /**
@@ -45,14 +46,19 @@ export const api = createTRPCNext<AppRouter>({
       ],
     };
   },
+
   /**
    * Whether tRPC should await queries when server rendering pages.
    *
    * @see https://trpc.io/docs/nextjs#ssr-boolean-default-false
    */
   ssr: false,
-});
+}
 
+/** A set of type-safe react-query hooks for your tRPC API. */
+export const api = createTRPCNext<AppRouter>(tRPCconfig);
+
+export const apiReact = createTRPCReact<AppRouter>();
 /**
  * Inference helper for inputs.
  *
