@@ -8,7 +8,9 @@
     "lint": "next lint",
     "start": "next start",
     "test": "vitest",
-    "testc": "vitest run --coverage"
+    "testc": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "testc:ui": "vitest --ui --coverage.enabled=true"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.2.1",
@@ -39,7 +41,9 @@
     "@typescript-eslint/parser": "^5.56.0",
     "@vitejs/plugin-react": "^4.0.0",
     "@vitest/coverage-c8": "^0.31.0",
+    "@vitest/ui": "^0.31.0",
     "autoprefixer": "^10.4.14",
+    "dotenv": "^16.0.3",
     "eslint": "^8.36.0",
     "eslint-config-next": "^13.4.1",
     "eslint-plugin-jest-dom": "^4.0.3",

@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [react()],
     test: {
         globals: true,
-        environment: 'jsdom',
+        // environment: jsdom',
         coverage: {
             provider: "c8",
             reporter: ["text", "json", "html"],
@@ -19,6 +19,7 @@ export default defineConfig({
         },
 
         exclude: [...configDefaults.exclude, "**/e2e/**"],
+        setupFiles: ['dotenv/config'],
     },
     resolve: {
         alias: {

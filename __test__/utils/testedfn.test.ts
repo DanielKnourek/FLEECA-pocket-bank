@@ -2,9 +2,10 @@ import { env } from '@/env.mjs';
 import { describe, it, expect } from 'vitest';
 
 describe("test server env access", () => {
-    
-    it("env discord is acessible", () => {
-        expect(true).toBeDefined();
-        // expect(env.DISCORD_CLIENT_ID).toBeDefined();
+
+    it("server env is acessible", () => {
+        expect(env.NEXT_PUBLIC_CLIENT_CODENAME).toBeDefined();
+        expect(env.NODE_ENV).toBeDefined();
+
     });
 });
