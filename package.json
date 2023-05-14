@@ -7,7 +7,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "test": "IS_TEST=true vitest",
+    "test": "vitest",
     "testc": "vitest run --coverage"
   },
   "dependencies": {
