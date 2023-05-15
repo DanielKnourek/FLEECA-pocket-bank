@@ -10,10 +10,14 @@ export default defineConfig({
         // environment: jsdom',
         coverage: {
             provider: "c8",
+            all: true,
             reporter: ["text", "json", "html"],
             reportsDirectory: './coverage',
             include: ['src/**'],
-            exclude: ['src/server/api/trpc.ts'],
+            exclude: [
+                'src/server/api/trpc.ts',
+                'src/server/auth.ts',
+        ],
             lines: 75,
             functions: 75,
         },
