@@ -2,7 +2,7 @@ import { httpBatchLink } from "@trpc/react-query";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { apiReact } from "@/utils/api";
 import superjson from "superjson";
-import { PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
 
 const url = `http://localhost:${process.env.PORT ?? 3000}/api/trpc`;
 
@@ -16,7 +16,7 @@ const trpcClient = apiReact.createClient({
   transformer: superjson,
 });
 
-export const withNextTRPC = ({ children }: PropsWithChildren<{}>) => (
+export const withNextTRPC = ({ children }: PropsWithChildren) => (
   <apiReact.Provider client={trpcClient} queryClient={queryClient}>
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   </apiReact.Provider>
