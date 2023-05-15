@@ -330,15 +330,49 @@ Tyto data jsou:
           \begin{itemize}
               \item Kurzy měn ČNB
               \item zdroj: \href{https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt}{cnb.cz}
-              \item formát: CSV
-                    hlavička: země|měna|množství|kód|kurz
+              \item formát:
+                    \begin{itemize}
+                        \item 1. řádek obsahující datum
+                        \item 2. CSV hlavička odpovídající schématu CSV
+                        \item 3.+ data ve formátu CSV s oddělovačem '|'
+
+                    \end{itemize}
+                    \begin{table}[h!]
+                        \centering
+                        \begin{tabular}{ |c|l|l| }
+                            \hline
+                            id & název sloupečku & typ hodnoty     \\
+                            \hline
+                            1. & "země"          & String          \\
+                            2. & "měna"          & String          \\
+                            3. & "množství"      & Number          \\
+                            3. & "kód"           & String          \\
+                            3. & "kurz"          & Number (double) \\
+                            \hline
+                        \end{tabular}
+                        \caption{Tabulka CSV schéma}
+                    \end{table}
           \end{itemize}
 \end{itemize}
 
 Bez těchto dat nelze provádět převody mezi měnami.
 
 \subsection{Kvalita Softwaru}
-Aby byl snížen počet chyb v kódu a aplikace byla co nejvíce spolehlivá a bezpečná, bude využit automatizační prostředek Github Actions pro kontejnerizační platformu Docker. Tento prostředek bude spouštět testy a statickou analýzu kódu. Testy budou spouštěny při každém Testy a statická analýza bude spouštěna při každém vydání nové verze. Testy budou spouštěny pomocí frameworku Jest. Statická analýza bude spouštěna pomocí nástroje SonarCloud.
+Aby byl snížen počet chyb v kódu a aplikace byla co nejvíce spolehlivá a bezpečná, bude využit automatizační prostředek Github Actions pro kontejnerizační platformu Docker. Tento prostředek bude spouštět testy a statickou analýzu kódu. Testy budou spouštěny při každém Testy a statická analýza bude spouštěna při každém vydání nové verze. Testy a statická analýza bude provedena za pomocí frameworku Vitest.
+
+\section{Očekávané scénáře}
+\subsection{Chyba při aktualizaci csv z ČNB}
+Pokud je pokyn k převodu měny a server nedokáže aktualizovat csv z ČNB, použije se nejaktuálnější záznam z vlastní databáze, pokud server bude mít data starší jak 24h tak převod měny nepovolí.
+
+Důvodem může být výpadek na straně ČNB, chybný formát stahovaného csv souboru, odebrání dotazované měny z csv souboru.
+
+\subsection{Výpadek služby Vercel}
+Služba Vercel poskytuje hosting a zařizuje správu webového serveru a databáze. V případě výpadku na straně služeb, které společnost Vercel poskytuje je třeba kontaktovat a zjistit, zda se jedná trvalý problém nebo mimořádný výpadek. Vercel má avšak repliky dat i serverů po celém světě s výbornou historií o zacházení dat svých klientů.
+
+V případě nepoužívání aplikace se aplikace vypíná pro ušetření výpočetních zdrojů a v takovémto případě nový požadavek na webové rozhraní zažádá o tzv. cold start aplikace u který trvá přibližně 1-3s než bude schopný hosting odeslat odpověď uživateli. Další dotazy by neměli být nějak omezované.
+
+\subsection{Platba z účtu, který nemá dostatek financí}
+V případě platby z účtu, který nemá dostatek financí, bude nabídnuto zda uživatel chce použít další účet, který může být v jiné měně.
 
 \section{Vývoj a cena}
 Vzhledem k vyžádaným platformám a požadavků aplikace je doba vývoje odhadována na 6 týdnů. Čistá práce je odhadována na 90 hodin komulativního času všech vývojářů. Cena aplikace je odhadována na 37 125Kč
