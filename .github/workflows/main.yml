@@ -2,7 +2,7 @@ name: Automated Tests
 
 on:
   pull_request:
-    branches: ["*"]
+    branches: ["main", "dev/main"]
     types: [opened, edited, synchronize, reopened]
   push:
     branches: ["main", "dev/main"]
@@ -15,7 +15,7 @@ env:
   NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
   DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
   DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
-  
+
 jobs:
   build-test:
     runs-on: ubuntu-latest
