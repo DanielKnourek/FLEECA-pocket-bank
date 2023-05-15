@@ -35,4 +35,4 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          pwd && ls -la && echo user: $USER  nexturl: $NEXTAUTH_URL
+          pwd && ls -la && echo user: $USER  nexturl: $NEXTAUTH_URL I dontcare about sonartoken $SONAR_TOKEN
