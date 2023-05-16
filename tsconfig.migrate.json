@@ -1,0 +1,6 @@
+{
+    "esm": true,
+    "compilerOptions": {
+      "module": "CommonJS",
+    }
+  }

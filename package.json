@@ -49,6 +49,7 @@
     "eslint-plugin-jest-dom": "^4.0.3",
     "git-conventional-commits": "^2.6.3",
     "jsdom": "^22.0.0",
+    "kysely-codegen": "^0.10.0",
     "postcss": "^8.4.21",
     "prettier": "^2.8.6",
     "prettier-plugin-tailwindcss": "^0.2.6",
