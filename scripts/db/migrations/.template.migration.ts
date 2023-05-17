@@ -1,13 +1,13 @@
 import { Kysely, sql } from 'kysely';
-import { KyselyWithSchema } from '@/server/db/db-schema';
+import { CurrentSchema } from '../migrator';
 
-export async function up(db: KyselyWithSchema<any>): Promise<void> {
+export async function up(db: Kysely<any>): Promise<void> {
+  console.info(`Migration ${__filename} up on schema: ${CurrentSchema}`);
   // Migration code
-  console.info("db.schemaName0", db.schemaName);
 
 }
 
-export async function down(db: KyselyWithSchema<any>): Promise<void> {
+export async function down(db: Kysely<any>): Promise<void> {
+  console.info(`Migration ${__filename} down on schema: ${CurrentSchema}`);
   // Migration code
-
 }

@@ -1,15 +1,16 @@
 import { Kysely, sql } from 'kysely'
-import { KyselyWithSchema } from '@/server/db/db-schema';
+import { CurrentSchema } from '../migrator';
 
 /**
  * Initial creation of a database
  */
 
-export async function up(db: KyselyWithSchema<any>): Promise<void> {
+export async function up(db: Kysely<any>): Promise<void> {
+  console.info(`Migration ${__filename} up on schema: ${CurrentSchema}`);
   // Migration code
-  console.info("db.schemaName2", db.schemaName);
+
   // await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`.execute(db);
-  await db.schema
+  await db.schema.withSchema(CurrentSchema)
     .createTable('UserAccount')
     .addColumn('id', 'uuid', (col) => {
       return col
@@ -39,7 +40,7 @@ export async function up(db: KyselyWithSchema<any>): Promise<void> {
     )
     .execute();
 
-  await db.schema
+  await db.schema.withSchema(CurrentSchema)
     .createTable('ExchangeRate')
     .addColumn('country', 'varchar(25)', (col) => {
       return col
@@ -69,7 +70,7 @@ export async function up(db: KyselyWithSchema<any>): Promise<void> {
     .addPrimaryKeyConstraint('ExchangeRate_pk', ['currency_code', 'created_at'])
     .execute();
 
-  await db.schema
+  await db.schema.withSchema(CurrentSchema)
     .createTable('BankAccount')
     .addColumn('id', 'uuid', (col) => {
       return col
@@ -101,7 +102,7 @@ export async function up(db: KyselyWithSchema<any>): Promise<void> {
     )
     .execute();
 
-  await db.schema
+  await db.schema.withSchema(CurrentSchema)
     .createTable('BankAccountMember')
     .addColumn('member_id', 'uuid', (col) => {
       return col
@@ -121,7 +122,7 @@ export async function up(db: KyselyWithSchema<any>): Promise<void> {
     .addPrimaryKeyConstraint('BankAccountMember_pk', ['bank_account_id', 'member_id'])
     .execute();
 
-  await db.schema
+  await db.schema.withSchema(CurrentSchema)
     .createTable('TransactionLog')
     .addColumn('id', 'serial', (col) => {
       return col
@@ -164,11 +165,12 @@ export async function up(db: KyselyWithSchema<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
+  console.info(`Migration ${__filename} down on schema: ${CurrentSchema}`);
   // Migration code
 
-  await db.schema.dropTable('TransactionLog').execute();
-  await db.schema.dropTable('BankAccountMember').execute();
-  await db.schema.dropTable('ExchangeRate').execute();
-  await db.schema.dropTable('BankAccount').execute();
-  await db.schema.dropTable('UserAccount').execute();
+  await db.schema.withSchema(CurrentSchema).dropTable('TransactionLog').execute();
+  await db.schema.withSchema(CurrentSchema).dropTable('BankAccountMember').execute();
+  await db.schema.withSchema(CurrentSchema).dropTable('ExchangeRate').execute();
+  await db.schema.withSchema(CurrentSchema).dropTable('BankAccount').execute();
+  await db.schema.withSchema(CurrentSchema).dropTable('UserAccount').execute();
 }

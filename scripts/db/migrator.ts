@@ -9,57 +9,20 @@ import {
     Kysely,
 } from 'kysely'
 import * as dotenv from 'dotenv';
-import { Database, KyselyWithSchema } from '@/server/db/db-schema';
 dotenv.config();
 
 
 async function migrateToLatest() {
     console.log('Starting a migrator!');
-    console.log("process.env.POSTGRES_URL", process.env.POSTGRES_URL)
 
-    const db: KyselyWithSchema = new KyselyWithSchema({
+    const db = new Kysely({
         dialect: new PostgresDialect({
             pool: new Pool({
                 connectionString: process.env.POSTGRES_URL,
                 ssl: true,
             }),
-        }),
-        schemaName: "dev"
-    });
-
-    (db as Kysely<Database>).insertInto('ExchangeRate').values({
-        country: "das",
-        currency_code: "SAD",
-        currency_name: db.schemaName + "foo",
-        price_ammout: 1,
-        qty_ammout: 45.5
-    }).execute();
-
-    // interface WithSchema<DB> extends Kysely<DB> {
-    //   schemaName: string
-    // }
-
-    // const db: WithSchema<unknown> = {
-    //   ...(new Kysely({
-    //     dialect: new PostgresDialect({
-    //       pool: new Pool({
-    //         connectionString: process.env.POSTGRES_URL,
-    //         ssl: true,
-    //       }),
-    //     })
-    //   })
-    //   ),
-    //   // schemaName: "dev",
-    // }
-
-    // const db = new Kysely({
-    //   dialect: new PostgresDialect({
-    //     pool: new Pool({
-    //       connectionString: process.env.POSTGRES_URL,
-    //       ssl: true,
-    //     }),
-    //   })
-    // })
+        })
+    })
 
     const migrator = new Migrator({
         db,
@@ -69,20 +32,32 @@ async function migrateToLatest() {
             // This needs to be an absolute path.
             migrationFolder: path.join(__dirname, 'migrations'),
         }),
+        migrationTableSchema: CurrentSchema,
     })
 
     let error: MigrationResultSet["error"];
     let results: MigrationResultSet["results"];
-    switch (parseDirection()) {
-        case 'up':
-            ({ error, results } = await migrator.migrateUp());
+    const direction = parseDirection();
+
+    let result: MigrationResultSet;
+    for (let i = 0; i < direction.count; i++) {
+        switch (direction.direction) {
+            case 'up':
+                (result = await migrator.migrateUp());
+                break;
+            case 'down':
+                (result = await migrator.migrateDown());
+            case 'latest':
+            default:
+                (result = await migrator.migrateToLatest());
+                break;
+        }
+        if (!!result.results) {
+            results = results?.concat(result.results);
+        }
+        if (error) {
             break;
-        case 'down':
-            ({ error, results } = await migrator.migrateDown());
-        case 'latest':
-        default:
-            ({ error, results } = await migrator.migrateToLatest());
-            break;
+        }
     }
 
     results?.forEach((it) => {
@@ -101,20 +76,48 @@ async function migrateToLatest() {
 
     await db.destroy();
 }
-
-const parseDirection = (): 'up' | 'down' | 'latest' => {
-    for (const arg of process.argv) {
+type Direction = { direction: 'up' | 'down' | 'latest', count: number };
+const parseDirection = (): Direction => {
+    let result!: Direction;
+    for (let argi = 0; argi < process.argv.length; argi++) {
+        const arg = process.argv[argi];
+        if (arg === undefined) {
+            break;
+        }
         if (arg.includes('--up')) {
-            return 'up';
+            result = {
+                count: 1,
+                direction: 'up',
+            };
         }
         if (arg.includes('--down')) {
-            return 'down';
+            result = {
+                count: 1,
+                direction: 'down',
+            };
         }
         if (arg.includes('--latest')) {
-            return 'latest';
+            result = {
+                count: 1,
+                direction: 'latest',
+            };
+        }
+        if (result !== undefined) {
+            let possibleCount = Number(process.argv[argi + 1]);
+            result.count = Number(isNaN(possibleCount)) || possibleCount;
+            return result;
         }
     }
-    return 'latest';
+    return {
+        count: 1,
+        direction: 'latest',
+    };
 }
 
+const getCurrentSchema = () => {
+    return process.env.POSTGRES_SCHEMA ?? 'dev';
+}
+const CurrentSchema = getCurrentSchema();
+
 export default migrateToLatest();
+export { CurrentSchema };

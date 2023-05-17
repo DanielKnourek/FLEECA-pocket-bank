@@ -52,17 +52,3 @@ interface TransactionLogTable {
     successful: boolean,
     created_at: ColumnType<Date, string | undefined, never>,
 }
-
-interface WithSchemaConf extends KyselyConfig {
-    schemaName: string
-}
-
-class KyselyWithSchema<DB = any> extends Kysely<DB> {
-    constructor(args: WithSchemaConf) {
-        super(args);
-        this.schemaName = args.schemaName;
-    }
-    public schemaName: string | undefined;
-}
-
-export {KyselyWithSchema}
