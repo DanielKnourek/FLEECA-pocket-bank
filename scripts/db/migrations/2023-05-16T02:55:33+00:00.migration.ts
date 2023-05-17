@@ -1,15 +1,14 @@
-import { sql } from '@vercel/postgres';
-import { Kysely } from 'kysely'
+import { Kysely, sql } from 'kysely'
+import { KyselyWithSchema } from '@/server/db/db-schema';
 
 /**
  * Initial creation of a database
  */
 
-export async function up(db: Kysely<any>): Promise<void> {
+export async function up(db: KyselyWithSchema<any>): Promise<void> {
   // Migration code
-
-  await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`
-
+  console.info("db.schemaName2", db.schemaName);
+  // await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`.execute(db);
   await db.schema
     .createTable('UserAccount')
     .addColumn('id', 'uuid', (col) => {
@@ -60,15 +59,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     })
     .addColumn('currency_code', 'varchar(10)', (col) => {
       return col
-        .primaryKey()
         .notNull()
     })
     .addColumn('created_at', 'timestamp', (col) =>
       col
-        .primaryKey()
         .defaultTo(sql`now()`)
         .notNull()
     )
+    .addPrimaryKeyConstraint('ExchangeRate_pk', ['currency_code', 'created_at'])
     .execute();
 
   await db.schema
@@ -78,16 +76,14 @@ export async function up(db: Kysely<any>): Promise<void> {
         .primaryKey()
         .defaultTo(sql`gen_random_uuid()`)
     })
-    .addColumn('owner_id', 'integer', (col) => {
+    .addColumn('owner_id', 'uuid', (col) => {
       return col
         .references('BankAccount.id')
         .onDelete('no action')
         .notNull()
     })
-    .addColumn('currency_code', 'integer', (col) => {
+    .addColumn('currency_code', 'varchar(10)', (col) => {
       return col
-        .references('ExchangeRate.currency_code')
-        .onDelete('no action')
         .notNull()
     })
     .addColumn('balance', 'decimal', (col) => {
@@ -109,14 +105,12 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('BankAccountMember')
     .addColumn('member_id', 'uuid', (col) => {
       return col
-        .primaryKey()
         .references('UserAccount.id')
         .onDelete('cascade')
         .notNull()
     })
     .addColumn('bank_account_id', 'uuid', (col) => {
       return col
-        .primaryKey()
         .references('BankAccount.id')
         .onDelete('cascade')
         .notNull()
@@ -124,6 +118,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('created_at', 'timestamp', (col) =>
       col.defaultTo(sql`now()`).notNull()
     )
+    .addPrimaryKeyConstraint('BankAccountMember_pk', ['bank_account_id', 'member_id'])
     .execute();
 
   await db.schema
@@ -135,36 +130,28 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('sender_id', 'uuid', (col) => {
       return col
         .references('UserAccount.id')
-        .onDelete('no action')
+        .onDelete('cascade')
         .notNull()
     })
-    .addColumn('sender_currency_code', 'varchar(10)', (col) => {
+    .addColumn('sender_account_id', 'uuid', (col) => {
       return col
-        .references('ExchangeRate.currency_code')
-        .onDelete('no action')
+        .references('BankAccount.id')
+        .onDelete('set null')
         .notNull()
     })
-    .addColumn('balance', 'decimal', (col) => {
+    .addColumn('sender_payment_ammount', 'decimal', (col) => {
       return col
         .notNull()
-        .defaultTo(0)
     })
-    .addColumn('receiver_id', 'uuid', (col) => {
+    .addColumn('receiver_account_id', 'uuid', (col) => {
       return col
-        .references('UserAccount.id')
-        .onDelete('no action')
-        .notNull()
-    })
-    .addColumn('receiver_currency_code', 'varchar(10)', (col) => {
-      return col
-        .references('ExchangeRate.currency_code')
-        .onDelete('no action')
+        .references('BankAccount.id')
+        .onDelete('set null')
         .notNull()
     })
     .addColumn('receiver_payment_ammount', 'decimal', (col) => {
       return col
         .notNull()
-        .defaultTo(0)
     })
     .addColumn('successful', 'boolean', (col) => {
       return col

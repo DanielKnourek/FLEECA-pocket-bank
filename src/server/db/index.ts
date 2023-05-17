@@ -1,5 +1,7 @@
 import { createKysely } from "@vercel/postgres-kysely";
-import { Database } from "@/server/db/db.d";
+// import { Database, WithSchemaConf } from "@/server/db/db";
+import { Database } from "./db-schema";
+import { Kysely, KyselyConfig } from "kysely";
 
 const db = createKysely<Database>();
 

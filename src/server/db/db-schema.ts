@@ -1,5 +1,5 @@
 import { ColumnType, Generated } from "kysely";
-
+import { Kysely, KyselyConfig } from 'kysely'
 export interface Database {
     UserAccount: UserAccountTable,
     BankAccount: BankAccountTable,
@@ -44,12 +44,25 @@ interface BankAccountMemberTable {
 
 interface TransactionLogTable {
     id: Generated<number>,
-    sender_id: BankAccountTable['id'],
-    sender_currency_code: ExchangeRateTable['currency_code'],
+    sender_id: UserAccountTable['id'],
+    sender_account_id: BankAccountTable['id'],
     sender_payment_ammount: number,
-    receiver_id: BankAccountTable['id'],
-    receiver_currency_code: ExchangeRateTable['currency_code'],
+    receiver_account_id: BankAccountTable['id'],
     receiver_payment_ammount: number,
     successful: boolean,
     created_at: ColumnType<Date, string | undefined, never>,
 }
+
+interface WithSchemaConf extends KyselyConfig {
+    schemaName: string
+}
+
+class KyselyWithSchema<DB = any> extends Kysely<DB> {
+    constructor(args: WithSchemaConf) {
+        super(args);
+        this.schemaName = args.schemaName;
+    }
+    public schemaName: string | undefined;
+}
+
+export {KyselyWithSchema}
