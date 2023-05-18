@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createEnv } from "@t3-oss/env-nextjs";
 
 export const env = createEnv({
-  
+
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars.
@@ -23,6 +23,13 @@ export const env = createEnv({
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
+    POSTGRES_URL: z.string(),
+    POSTGRES_PRISMA_URL: z.string(),
+    POSTGRES_URL_NON_POOLING: z.string(),
+    POSTGRES_USER: z.string(),
+    POSTGRES_HOST: z.string(),
+    POSTGRES_PASSWORD: z.string(),
+    POSTGRES_DATABASE: z.string(),
   },
 
   /**
@@ -46,6 +53,13 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
-    NEXT_PUBLIC_CLIENT_CODENAME: "owl-pavilon"
+    NEXT_PUBLIC_CLIENT_CODENAME: "owl-pavilon",
+    POSTGRES_URL: process.env.POSTGRES_URL,
+    POSTGRES_PRISMA_URL: process.env.POSTGRES_PRISMA_URL,
+    POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING,
+    POSTGRES_USER: process.env.POSTGRES_USER,
+    POSTGRES_HOST: process.env.POSTGRES_HOST,
+    POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+    POSTGRES_DATABASE: process.env.POSTGRES_DATABASE
   },
 });

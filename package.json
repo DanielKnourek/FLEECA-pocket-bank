@@ -10,7 +10,11 @@
     "test": "vitest",
     "testc": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "testc:ui": "vitest --ui --coverage.enabled=true"
+    "testc:ui": "vitest --ui --coverage.enabled=true",
+    "migration:new": "cp scripts/db/migrations/.template.migration.ts scripts/db/migrations/$(date -Is).migration.ts ",
+    "migration:up": "ts-node --cwdMode --project tsconfig.migration.json scripts/db/migrator.ts --up",
+    "migration:down": "ts-node --cwdMode --project tsconfig.migration.json scripts/db/migrator.ts --down",
+    "migration:latest": "ts-node --cwdMode --project tsconfig.migration.json scripts/db/migrator.ts --latest"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.2.1",
@@ -49,13 +53,18 @@
     "eslint-plugin-jest-dom": "^4.0.3",
     "git-conventional-commits": "^2.6.3",
     "jsdom": "^22.0.0",
+    "kysely-codegen": "^0.10.0",
+    "kysely-neon": "1.0.2",
+    "pg": "^8.11.0",
     "postcss": "^8.4.21",
     "prettier": "^2.8.6",
     "prettier-plugin-tailwindcss": "^0.2.6",
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.2",
-    "vitest": "^0.31.0"
+    "vitest": "^0.31.0",
+    "vitest-mock-extended": "^1.1.3"
   },
   "ct3aMetadata": {
     "initVersion": "7.13.0"
