@@ -1,9 +1,9 @@
 import { db } from '@/server/db'
-import { Database } from '@/server/db/db-schema'
-import { InsertType, SelectType, Selectable, QueryResult } from 'kysely'
+import { QueryResult } from 'kysely'
 import { fixtureUserAccount } from 'scripts/db/fixtures/db-schema';
-import { describe, it, expect, vi, expectTypeOf } from 'vitest'
-import { DeepMockProxy, mock, mockDeep } from 'vitest-mock-extended';
+import { describe, it, expect } from 'vitest'
+import { DeepMockProxy, mockDeep } from 'vitest-mock-extended';
+
 describe('Validate db querry builder', () => {
 
     it('select from {UserAccount}', async () => {
@@ -17,12 +17,9 @@ describe('Validate db querry builder', () => {
 
         const mockDB: DeepMockProxy<typeof db> = mockDeep<typeof db>({ funcPropSupport: true });
         mockDB.executeQuery.calledWith(compiledQuerry).mockReturnValue(Promise.resolve(fixtureResult));
-        const executedResult = (await mockDB.executeQuery(compiledQuerry)) as QueryResult<typeof fixtureUserAccount> ;
+        const executedResult = (await mockDB.executeQuery(compiledQuerry)) as QueryResult<typeof fixtureUserAccount>;
 
         expect(executedResult.rows.length).toBeGreaterThan(0);
         expect(executedResult.rows[0]?.email).eq(fixtureUserAccount.email);
-        
-
     })
-
 })
