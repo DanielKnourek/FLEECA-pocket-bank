@@ -34,7 +34,8 @@
       "@/server/*": [
         "src/server/*"
       ],
-    }
+    },
+    "strictNullChecks": true,
   },
   "include": [
     ".eslintrc.cjs",

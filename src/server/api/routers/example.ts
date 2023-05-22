@@ -5,6 +5,8 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { insertUser } from "@/utils/user";
+import { DowloadAndParseDSV, getExchangeRate } from "@/utils/exchangeRate";
+
 export const exampleRouter = createTRPCRouter({
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
@@ -26,4 +28,13 @@ export const exampleRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
+
+  getExchangeRate: publicProcedure
+    .query(async ({ input }) => {
+      return {
+        money: await getExchangeRate(),
+        // money: await getExchangeRate("EUR"),
+        // money: await DowloadAndParseDSV()
+      }
+    })
 });
