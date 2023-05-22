@@ -7,10 +7,6 @@ import { toZod } from 'tozod'
 import { db, useDB } from "@/server/db";
 
 
-const isLessThanXhours = (date: Date, Xtimes: number): boolean => {
-    return ((Date.now() - date.getTime()) < (Xtimes * 3_600_00)); // 1h*60m*60s*1000ms
-}
-
 /**
  * Finds and returns latest cached ExchangeRate if exchangeRate is older than 12h it tries to download and update database.
  * @param currencyCode usally 3 letter abbriviation of a requested currency
@@ -21,6 +17,10 @@ const getExchangeRate = async (currencyCode?: string) => {
         return getSpecificExchangeRate(currencyCode);
     }
     return getAllExchangeRates();
+}
+
+const isLessThanXhours = (date: Date, Xtimes: number): boolean => {
+    return ((Date.now() - date.getTime()) < (Xtimes * 3_600_00)); // 1h*60m*60s*1000ms
 }
 
 const getAllExchangeRates = async () => {
@@ -117,4 +117,16 @@ const DowloadAndParseDSV = async () => {
     return result;
 }
 
-export { DowloadAndParseDSV, getExchangeRate }
+const test = {
+    isLessThanXhours,
+    getAllExchangeRates,
+    getSpecificExchangeRate,
+    updateExchangeRateRecord,
+    getAllStoredExchangeRates,
+    getStoredExchangeRate,
+    parseFloatComma,
+    ExchangeRateSchema,
+    DowloadAndParseDSV,
+}
+
+export { getExchangeRate, test }

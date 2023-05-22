@@ -5,7 +5,7 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { insertUser } from "@/utils/user";
-import { DowloadAndParseDSV, getExchangeRate } from "@/utils/exchangeRate";
+import { getExchangeRate } from "@/utils/exchangeRate";
 
 export const exampleRouter = createTRPCRouter({
   hello: publicProcedure
