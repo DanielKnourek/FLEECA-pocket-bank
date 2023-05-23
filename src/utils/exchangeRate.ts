@@ -117,7 +117,7 @@ const DowloadAndParseDSV = async () => {
     return result;
 }
 
-const test = {
+const fn = {
     isLessThanXhours,
     getAllExchangeRates,
     getSpecificExchangeRate,
@@ -127,6 +127,8 @@ const test = {
     parseFloatComma,
     ExchangeRateSchema,
     DowloadAndParseDSV,
+    getExchangeRate,
 }
 
-export { getExchangeRate, test }
+export default fn;
+export { getExchangeRate }
