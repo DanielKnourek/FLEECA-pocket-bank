@@ -33,6 +33,8 @@ export default defineConfig({
             "@/pages/": join(__dirname, "./src/pages/"),
             "@/utils/": join(__dirname, "./src/utils/"),
             "@/server/": join(__dirname, "./src/server/"),
+            "@/types/": join(__dirname, "./src/types/"),
+            "@/components/": join(__dirname, "./src/components/"),
         },
     },
 });
