@@ -17,13 +17,15 @@ export default defineConfig({
             exclude: [
                 'src/server/api/trpc.ts',
                 'src/server/auth.ts',
-        ],
+            ],
             lines: 75,
             functions: 75,
         },
 
         exclude: [...configDefaults.exclude, "**/e2e/**"],
-        setupFiles: ['dotenv/config'],
+        setupFiles: [
+            'dotenv/config',
+        ],
     },
     resolve: {
         alias: {
@@ -31,6 +33,8 @@ export default defineConfig({
             "@/pages/": join(__dirname, "./src/pages/"),
             "@/utils/": join(__dirname, "./src/utils/"),
             "@/server/": join(__dirname, "./src/server/"),
+            "@/types/": join(__dirname, "./src/types/"),
+            "@/components/": join(__dirname, "./src/components/"),
         },
     },
 });

@@ -34,7 +34,14 @@
       "@/server/*": [
         "src/server/*"
       ],
-    }
+      "@/types/*": [
+        "src/types/*"
+      ],
+      "@/components/*": [
+        "src/components/*"
+      ],
+    },
+    "strictNullChecks": true,
   },
   "include": [
     ".eslintrc.cjs",

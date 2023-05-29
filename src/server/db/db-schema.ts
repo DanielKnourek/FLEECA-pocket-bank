@@ -1,6 +1,6 @@
 import { ColumnType, Generated } from "kysely";
-import { Kysely, KyselyConfig } from 'kysely'
-export interface Database {
+
+interface Database {
     UserAccount: UserAccountTable,
     BankAccount: BankAccountTable,
     BankAccountMember: BankAccountMemberTable,
@@ -15,7 +15,7 @@ interface UserAccountTable {
     email: string,
     login_platform_uid: string,
     enabled: Generated<boolean>,
-    created_at: ColumnType<Date, string | undefined, never>,
+    created_at: ColumnType<Date, Date | undefined, never>,
 }
 
 interface ExchangeRateTable {
@@ -24,7 +24,7 @@ interface ExchangeRateTable {
     qty_ammout: number,
     price_ammout: number,
     currency_code: string,
-    created_at: ColumnType<Date, string | undefined, never>,
+    created_at: ColumnType<Date, Date | undefined, never>,
 }
 
 interface BankAccountTable {
@@ -33,13 +33,13 @@ interface BankAccountTable {
     currency_code: ExchangeRateTable['currency_code'],
     balance: number,
     enabled: Generated<boolean>,
-    created_at: ColumnType<Date, string | undefined, never>,
+    created_at: ColumnType<Date, Date | undefined, never>,
 }
 
 interface BankAccountMemberTable {
     member_id: UserAccountTable['id'],
     bank_account_id: BankAccountTable['id'],
-    created_at: ColumnType<Date, string | undefined, never>,
+    created_at: ColumnType<Date, Date | undefined, never>,
 }
 
 interface TransactionLogTable {
@@ -50,5 +50,9 @@ interface TransactionLogTable {
     receiver_account_id: BankAccountTable['id'],
     receiver_payment_ammount: number,
     successful: boolean,
-    created_at: ColumnType<Date, string | undefined, never>,
+    created_at: ColumnType<Date, Date | undefined, never>,
+}
+
+export type {
+    Database
 }
