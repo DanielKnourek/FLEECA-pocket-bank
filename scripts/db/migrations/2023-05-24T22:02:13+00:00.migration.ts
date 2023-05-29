@@ -1,6 +1,10 @@
 import { Kysely, sql } from 'kysely';
 import { CurrentSchema } from '../migrator';
 
+/**
+ * No duplicites users
+ */
+
 export async function up(db: Kysely<any>): Promise<void> {
   console.info(`Migration ${__filename} up on schema: ${CurrentSchema}`);
   // Migration code
