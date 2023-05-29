@@ -19,4 +19,4 @@ const userRouter = createTRPCRouter({
         })
 });
 
-export { userRouter, newUserSchema };
+export { userRouter };
