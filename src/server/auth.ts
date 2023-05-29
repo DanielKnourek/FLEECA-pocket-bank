@@ -3,9 +3,14 @@ import {
   getServerSession,
   type NextAuthOptions,
   type DefaultSession,
+  Session,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import { env } from "@/env.mjs";
+import { isRegistered, isRegisteredParams } from "@/utils/userAccount/user";
+import { DefaultJWT, JWT, UserAccountJWT } from "next-auth/jwt";
+import { Database } from "./db/db-schema";
+import { Selectable } from "kysely";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -15,18 +20,27 @@ import { env } from "@/env.mjs";
  */
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: {
-      id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession["user"];
+    tokenData: JWT;
+    userAccount?: UserAccountJWT["data"];
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
+declare module "next-auth/jwt" {
+  type UserAccountJWT = {
+    exists: false,
+    data?: any
+  } | {
+    exists: true,
+    data: Selectable<Database['UserAccount']>
+  }
+  interface JWT extends DefaultJWT {
+    provider?: string,
+    userAccount?: UserAccountJWT
+  }
+}
+// const foo: JWT = {
+//   userAccountExists: false,
+//   user: "foo"
+// }
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -34,14 +48,84 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: 'jwt'
+  },
+  pages: {
+    newUser: "/account/new",
+  },
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    async signIn({ user, account, profile, email, credentials }) {
+      let data = { user, account, profile, email, credentials }
+
+      return true;
+      return '/account/new';
+    },
+    async redirect({ url, baseUrl }) {
+
+      const getCallbackUri = (params: { url: string, baseUrl: string }) => {
+        // Allows relative callback URLs
+
+        if (url.startsWith("/")) return `${baseUrl}${url}`
+        // Allows callback URLs on the same origin
+        else if (new URL(url).origin === baseUrl) return url
+        return baseUrl
+      }
+
+      return getCallbackUri({ baseUrl, url });
+    },
+
+    async session({ session, token, user }) {
+
+      if (token.userAccount) {
+        session.tokenData = {
+          email: token.email,
+          name: token.email,
+          picture: token.picture,
+          provider: token.provider,
+          userAccount: token.userAccount,
+        };
+        session.userAccount = token.userAccount.data;
+      }
+      return session
+    },
+    async jwt({ token, account }) {
+      if (!!account?.provider) {
+        token.provider = account?.provider;
+      }
+
+      let isUser: Selectable<Database['UserAccount']> | undefined;
+      if (!token.userAccount || !token.userAccount.exists) {
+        const targetUserAccount: isRegisteredParams = {
+          email: `${token.email}`,
+          login_platform_uid: `${token?.provider}`,
+        };
+
+        isUser = await isRegistered(targetUserAccount);
+        if (isUser == undefined) {
+          token = {
+            ...token,
+            userAccount: {
+              exists: false,
+              data: {
+
+              }
+            }
+          };
+        }
+        else {
+          token = {
+            ...token,
+            userAccount: {
+              exists: true,
+              data: isUser,
+            }
+          };
+        }
+      }
+
+      return token;
+    },
   },
   providers: [
     DiscordProvider({
