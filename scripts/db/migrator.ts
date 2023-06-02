@@ -55,7 +55,8 @@ async function migrateToLatest() {
         if (!!result.results) {
             results = results?.concat(result.results);
         }
-        if (error) {
+        if (!!result.error) {
+            error = result.error;
             break;
         }
     }
