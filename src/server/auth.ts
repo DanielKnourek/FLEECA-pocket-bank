@@ -21,7 +21,7 @@ import { Selectable } from "kysely";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     tokenData: JWT;
-    userAccount?: UserAccountJWT["data"];
+    userAccount?: Extract<UserAccountJWT, {exists: true}>['data'];
   }
 }
 declare module "next-auth/jwt" {

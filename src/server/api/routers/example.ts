@@ -5,7 +5,7 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 import { insertUser } from "@/utils/user";
-import { getExchangeRate } from "@/utils/exchangeRate";
+import { getAllExchangeRates, getExchangeRate } from "@/utils/exchangeRate";
 
 export const exampleRouter = createTRPCRouter({
   hello: publicProcedure
@@ -32,7 +32,7 @@ export const exampleRouter = createTRPCRouter({
   getExchangeRate: publicProcedure
     .query(async ({ input }) => {
       return {
-        money: await getExchangeRate(),
+        money: await getAllExchangeRates(),
         // money: await getExchangeRate("EUR"),
         // money: await DowloadAndParseDSV()
       }

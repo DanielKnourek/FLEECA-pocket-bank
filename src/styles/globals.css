@@ -8,3 +8,7 @@
     text-xs font-bold 
     transition-all duration-100 scale-0 origin-top;
   }
+
+.submitwithstate-error {
+  @apply transition-all origin-bottom duration-200 ease-in-out
+}

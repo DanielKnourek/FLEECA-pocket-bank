@@ -6,17 +6,14 @@ import { z } from "zod";
 import { toZod } from 'tozod'
 import { db, useDB } from "@/server/db";
 
-
 /**
  * Finds and returns latest cached ExchangeRate if exchangeRate is older than 12h it tries to download and update database.
  * @param currencyCode usally 3 letter abbriviation of a requested currency
  * @returns Schema Selectable<Database['ExchangeRate']> or Array<Selectable<Database['ExchangeRate']>> if param currencyCode is undefined
  */
-const getExchangeRate = async (currencyCode?: string) => {
-    if (currencyCode !== undefined) {
-        return getSpecificExchangeRate(currencyCode);
-    }
-    return getAllExchangeRates();
+const getExchangeRate = (currencyCode: string) => {
+    return getSpecificExchangeRate(currencyCode);
+
 }
 
 const isLessThanXhours = (date: Date, Xtimes: number): boolean => {
@@ -62,9 +59,15 @@ const getAllStoredExchangeRates = () => {
     return useDB.selectFrom('ExchangeRate')
         .select([
             'ExchangeRate.currency_code',
-            db.fn.max('created_at').as('created_at')
+            db.fn.max('created_at').as('created_at'),
+            'ExchangeRate.country',
+            'ExchangeRate.currency_name'
         ])
-        .groupBy(['ExchangeRate.currency_code'])
+        .groupBy([
+            'ExchangeRate.currency_code',
+            'ExchangeRate.country',
+            'ExchangeRate.currency_name'
+        ])
         .execute();
 }
 
@@ -113,7 +116,13 @@ const DowloadAndParseDSV = async () => {
                 }
             }))
         })
-        .then()
+    result.push({
+        country: "Česká republika",
+        currency_code: "CZK",
+        currency_name: "Česká koruna",
+        price_ammout: 1,
+        qty_ammout: 1,
+    })
     return result;
 }
 
@@ -131,4 +140,4 @@ const fn = {
 }
 
 export default fn;
-export { getExchangeRate }
+export { getExchangeRate, getAllExchangeRates }

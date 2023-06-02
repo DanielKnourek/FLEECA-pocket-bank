@@ -15,8 +15,6 @@ import { newUserSchema, newUserType } from "@/types/userAccount";
 
 const UserAccount: NextPage = () => {
     const user = useUser();
-    const usercontext = useContext(user.context);
-
 
     const registerUser = api.user.registerUser.useMutation();
 
@@ -31,8 +29,9 @@ const UserAccount: NextPage = () => {
 
     const createUserSubmit = async (data: newUserType) => {
         let res = await registerUser.mutateAsync(data);
-
+        // TODO redirect on success
     }
+
     return (
         <Layout>
             Welcome, please fill these so we can get to know you.
@@ -86,6 +85,7 @@ const UserAccount: NextPage = () => {
                             </label>
                             {errors.last_name && <span className="bg-red-500 text-white px-2 rounded-xl text-sm">{errors.last_name.message}</span>}
                         </div>
+                        {/* TODO implement SubmitWithState */}
                         <input className="p-1"
                             type="text"
                             {...register('last_name')} />

@@ -6,6 +6,7 @@ interface Database {
     BankAccountMember: BankAccountMemberTable,
     ExchangeRate: ExchangeRateTable,
     TransactionLog: TransactionLogTable,
+    CurrentExchangeRate: CurrentExchangeRateView,
 }
 
 interface UserAccountTable {
@@ -52,6 +53,15 @@ interface TransactionLogTable {
     successful: boolean,
     created_at: ColumnType<Date, Date | undefined, never>,
 }
+
+interface CurrentExchangeRateView {
+    country: Database['ExchangeRate']['country'];
+    created_at: Database['ExchangeRate']['created_at'];
+    currency_code: Database['ExchangeRate']['currency_code'];
+    currency_name: Database['ExchangeRate']['currency_name'];
+    price_ammout: Database['ExchangeRate']['price_ammout'];
+    qty_ammout: Database['ExchangeRate']['qty_ammout'];
+  }
 
 export type {
     Database
