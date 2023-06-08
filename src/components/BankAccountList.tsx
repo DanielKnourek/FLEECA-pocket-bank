@@ -7,7 +7,7 @@ const BankAccountList = () => {
         <section className="p-1"
         >
             List of your accounts
-            {Accounts.data && Accounts.data.map(account => <BankAccount account={account} />)}
+            {Accounts.data && Accounts.data.map(account => <BankAccount account={account} key={account.id}/>)}
         </section>
     )
 }
@@ -25,7 +25,7 @@ const BankAccount = ({ account }: BankAccountParams) => {
     return (
         <section className="flex flex-row bg-primary rounded-t-xl rounded-b-xl m-2 p-2"
             title="Bank Account"
-            id={`${account.bank_account_id}`}
+            // id={`${account.bank_account_id}`}
         >
             <div className="flex flex-col">
                 <div>

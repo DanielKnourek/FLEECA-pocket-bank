@@ -4,6 +4,7 @@ import { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import {CreateBankAccountForm} from '@/components/CreateBankAccountForm'
 import { BankAccountList } from "@/components/BankAccountList";
+import { MakeTransactionForm } from "@/components/MakeTransactionForm";
 
 const UserAccount: NextPage = () => {
     const user = useUser();
@@ -13,6 +14,7 @@ const UserAccount: NextPage = () => {
         <Layout requireSession={true}>
             private User Account
             <BankAccountList />
+            <MakeTransactionForm />
             <CreateBankAccountForm />
         </Layout>
     )

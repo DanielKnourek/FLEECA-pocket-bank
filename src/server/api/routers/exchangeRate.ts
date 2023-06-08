@@ -5,7 +5,8 @@ import {
     protectedProcedure,
 } from "@/server/api/trpc";
 import { insertUser } from "@/utils/user";
-import { getAllExchangeRates, getExchangeRate } from "@/utils/exchangeRate";
+import { calculateExchangeRate, getAllExchangeRates, getExchangeRate } from "@/utils/exchangeRate";
+import { currencyExchangeSchema } from "@/types/exchangeRate";
 
 const exchangeRateRouter = createTRPCRouter({
 
@@ -15,13 +16,23 @@ const exchangeRateRouter = createTRPCRouter({
                 list: await getAllExchangeRates(),
             }
         }),
+    
         getExchangeRate: publicProcedure
-            .input(z.string())
-            .query(async ({ input }) => {
-                return {
-                    rate: await getExchangeRate(input),
-                }
-            })
+        .input(z.string())
+        .query(async ({ input }) => {
+            return {
+                rate: await getExchangeRate(input),
+            }
+        }),
+    
+    calculateExchangeRate: publicProcedure
+        .input(currencyExchangeSchema)
+        .query(async ({input}) => {
+            const result = await calculateExchangeRate(input)
+            return {
+                ...result
+            }
+        })
 });
 
 export { exchangeRateRouter };

@@ -5,6 +5,7 @@ import { Insertable } from "kysely";
 import { z } from "zod";
 import { toZod } from 'tozod'
 import { db, useDB } from "@/server/db";
+import { currencyExchange } from "@/types/exchangeRate";
 
 /**
  * Finds and returns latest cached ExchangeRate if exchangeRate is older than 12h it tries to download and update database.
@@ -126,6 +127,28 @@ const DowloadAndParseDSV = async () => {
     return result;
 }
 
+const calculateExchangeRate = async (input: currencyExchange) => {
+    if (input.source_currency_code == input.target_currency_code) {
+
+        return {
+            ...input,
+            target_amount: input.source_amount,
+        }
+    }
+    const source = await getExchangeRate(input.source_currency_code);
+    const target = await getExchangeRate(input.target_currency_code);
+
+    if (source == undefined || target == undefined) {
+        throw new Error("could not load exchange rate");
+    }
+    const trueExchangeRate = source.price_ammout / source.qty_ammout * target.qty_ammout / target.price_ammout;
+
+    return {
+        ...input,
+        target_amount: input.source_amount * trueExchangeRate,
+    }
+}
+
 const fn = {
     isLessThanXhours,
     getAllExchangeRates,
@@ -137,7 +160,8 @@ const fn = {
     ExchangeRateSchema,
     DowloadAndParseDSV,
     getExchangeRate,
+    calculateExchangeRate
 }
 
 export default fn;
-export { getExchangeRate, getAllExchangeRates }
+export { getExchangeRate, getAllExchangeRates, calculateExchangeRate }

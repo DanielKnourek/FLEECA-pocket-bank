@@ -6,6 +6,24 @@ interface SubmitStateParams {
     className?: HTMLAttributes<HTMLInputElement>['className']
 }
 
+interface useSubmitWithStates {
+    states: ('submit' | 'loading' | 'success' | 'error' | undefined)
+}
+
+interface useSubmitWithStateParams {
+    defaultState?: useSubmitWithStates['states']
+}
+
+const useSubmitWithState = ({ defaultState = undefined }: useSubmitWithStateParams={}) => {
+    const [formSubmitState, setFormSubmitState] = useState<useSubmitWithStates['states']>(defaultState);
+
+    return {
+        button: SubmitWithState,
+        get: formSubmitState,
+        set: setFormSubmitState,
+    };
+}
+
 const SubmitWithState = ({ value, state, className }: SubmitStateParams) => {
     const [StateData, setStateData] = useState<{ className: HTMLAttributes<HTMLInputElement>['className'], message: string }>({
         className: 'bg-cyan-400',
@@ -15,15 +33,15 @@ const SubmitWithState = ({ value, state, className }: SubmitStateParams) => {
         switch (state) {
             case 'error':
                 setStateData({
-                        className: 'bg-red-700',
-                        message: 'Error'
-                    })
+                    className: 'bg-red-700',
+                    message: 'Error'
+                })
                 break;
             case 'success':
                 setStateData({
                     className: 'bg-green-600',
                     message: 'Success'
-                    })
+                })
                 break;
             case 'submit':
             case 'loading':
@@ -31,7 +49,7 @@ const SubmitWithState = ({ value, state, className }: SubmitStateParams) => {
                 setStateData({
                     className: 'bg-cyan-400',
                     message: 'Loading...'
-                    })
+                })
                 break;
         }
     }, [state])
@@ -52,4 +70,4 @@ const SubmitWithState = ({ value, state, className }: SubmitStateParams) => {
         </div>
     )
 }
-export { SubmitWithState };
+export { SubmitWithState, useSubmitWithState };

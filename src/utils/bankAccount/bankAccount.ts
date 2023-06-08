@@ -59,11 +59,17 @@ const getOwnerBankAccounts = async (owner_id: Selectable<Database['BankAccountMe
                 .onRef('CurrentExchangeRate.currency_code', '=', 'owner_bankAccounts.currency_code')
         )
         .selectAll()
-        .execute()
-        //TODO change selectAll to enumerate all fields
-        // 'member_id', 'bank_account_id', 'created_at', 'id', 'owner_id', 'currency_code', 'balance', 'enabled', 'country', 'currency_name', 'price_ammout', 'qty_ammout'
+        .execute();
+    //TODO change selectAll to enumerate all fields
+    // 'member_id', 'bank_account_id', 'created_at', 'id', 'owner_id', 'currency_code', 'balance', 'enabled', 'country', 'currency_name', 'price_ammout', 'qty_ammout'
 }
 
+const getBankAccountPublicInformation = async (bankAccount_id: Selectable<Database['BankAccountMember']>['bank_account_id']) => {
+    return await useDB.selectFrom('BankAccount')
+        .select(['BankAccount.currency_code', 'BankAccount.enabled', 'BankAccount.id', 'BankAccount.owner_id'])
+        .where('BankAccount.id', '=', bankAccount_id)
+        .executeTakeFirst();
+}
 
 interface deleteEmptyAccountResponseSuccess {
     success: true,
@@ -99,4 +105,4 @@ const deleteEmptyAccount = async ({ bankAccount_id, owner_id }: deleteEmptyAccou
         });
 }
 
-export { createBankAccount, getOwnerBankAccounts, deleteEmptyAccount };
+export { createBankAccount, getOwnerBankAccounts, deleteEmptyAccount, getBankAccountPublicInformation };
