@@ -1,9 +1,10 @@
 import { Database } from "@/server/db/db-schema";
-import { newTransactionClientType } from "@/types/transaction";
+import { listAccountTransactionHistoryType, newTransactionClientType } from "@/types/transaction";
 import { InsertQueryBuilder, InsertResult, Insertable, Selectable, UpdateQueryBuilder, UpdateResult } from "kysely";
 import { getBankAccountPublicInformation, getOwnerBankAccounts } from "./bankAccount";
 import { calculateExchangeRate } from "../exchangeRate";
 import { db, useDB } from "@/server/db";
+import { BankAccountIdentifierSchema, BankAccountIdentifierType } from "@/types/bankAccount";
 
 interface processTransactionBatchParams {
     transactions: newTransactionClientType[],
@@ -133,27 +134,44 @@ const performTransactions = async ({ transactions, sender_id }: performTransacti
     queries.push(addTransactionRecords);
 
     transactions.forEach(transaction => {
-        transaction.transaction.sender_account_id && 
-        queries.push(
-            useDB.updateTable('BankAccount')
-            .set(({bxp}) => ({
-                balance: bxp('BankAccount.balance', '-', transaction.transaction.sender_payment_ammount)
-            }))
-            .where('BankAccount.id', '=', transaction.transaction.sender_account_id)
-            .execute()
-        )
-        transaction.transaction.receiver_account_id && 
-        queries.push(
-            useDB.updateTable('BankAccount')
-            .set(({bxp}) => ({
-                balance: bxp('BankAccount.balance', '+', transaction.transaction.receiver_payment_ammount)
-            }))
-            .where('BankAccount.id', '=', transaction.transaction.receiver_account_id)
-            .execute()
-        )
+        transaction.transaction.sender_account_id &&
+            queries.push(
+                useDB.updateTable('BankAccount')
+                    .set(({ bxp }) => ({
+                        balance: bxp('BankAccount.balance', '-', transaction.transaction.sender_payment_ammount)
+                    }))
+                    .where('BankAccount.id', '=', transaction.transaction.sender_account_id)
+                    .execute()
+            )
+        transaction.transaction.receiver_account_id &&
+            queries.push(
+                useDB.updateTable('BankAccount')
+                    .set(({ bxp }) => ({
+                        balance: bxp('BankAccount.balance', '+', transaction.transaction.receiver_payment_ammount)
+                    }))
+                    .where('BankAccount.id', '=', transaction.transaction.receiver_account_id)
+                    .execute()
+            )
     })
 
     await Promise.all(queries);
 }
 
-export { processTransactionBatch }
+
+const listAccountTransactionHistory = async ({ id, page = 0, owner_id }: listAccountTransactionHistoryType) => {
+    //TODO add check - only account memmber can see logs
+    return await useDB.selectFrom('TransactionLog')
+        .where(({ or, cmpr, and }) => and([
+            or([
+                cmpr('TransactionLog.receiver_account_id', '=', id),
+                cmpr('TransactionLog.sender_account_id', '=', id),
+            ])
+        ]))
+        .orderBy('TransactionLog.created_at', 'desc')
+        .selectAll()
+        .limit(10)
+        .offset(page)
+        .execute();
+}
+
+export { processTransactionBatch, listAccountTransactionHistory }

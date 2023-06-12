@@ -2,6 +2,7 @@ import { Database } from "@/server/db/db-schema";
 import { Insertable, Selectable } from "kysely";
 import { toZod } from "tozod";
 import { z } from "zod";
+import { BankAccountIdentifierSchema } from "./bankAccount";
 
 const MAX_TRANSACTION = 1_000_000_000;
 
@@ -21,7 +22,7 @@ const foo = newTransactionSchema.pick({
     sender_payment_ammount: true,
 }).extend({ type: z.literal('send') });
 
-foo.extend({sender_account_id: z.string().uuid().refine((val) => val.includes('a'))})
+foo.extend({ sender_account_id: z.string().uuid().refine((val) => val.includes('a')) })
 const newTransactionClientSchema = z.union([
     newTransactionSchema.pick({
         sender_account_id: true,
@@ -37,6 +38,26 @@ const newTransactionClientSchema = z.union([
 
 type newTransactionClientType = z.infer<typeof newTransactionClientSchema>;
 
+const listAccountTransactionHistorySchema = BankAccountIdentifierSchema
+    .extend({
+        page: z.number().optional().default(0),
+        owner_id: z.string().uuid(),
+    })
 
-export type { newTransactionType, newTransactionClientType };
-export { newTransactionSchema, newTransactionClientSchema };
+type listAccountTransactionHistoryType = z.infer<typeof listAccountTransactionHistorySchema>;
+
+const listAccountTransactionHistoryClientSchema = listAccountTransactionHistorySchema
+    .omit({
+        owner_id: true,
+    })
+
+type listAccountTransactionHistoryClientType = z.infer<typeof listAccountTransactionHistoryClientSchema>;
+
+export type {
+    newTransactionType, newTransactionClientType,
+    listAccountTransactionHistoryType, listAccountTransactionHistoryClientType
+};
+export {
+    newTransactionSchema, newTransactionClientSchema,
+    listAccountTransactionHistorySchema, listAccountTransactionHistoryClientSchema
+};

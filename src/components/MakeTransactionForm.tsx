@@ -33,13 +33,13 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
 
     const processTransactionSubmit = async (data: newTransactionClientType) => {
         SubmitButton.set('loading');
-        const result = await processTransaction.mutateAsync(data)
-        .then(data => {
-            SubmitButton.set('success');
-        })
-        .catch(error => {
-            SubmitButton.set('error');
-        })
+        await processTransaction.mutateAsync(data)
+            .then(data => {
+                SubmitButton.set('success');
+            })
+            .catch(error => {
+                SubmitButton.set('error');
+            })
 
     }
 
@@ -51,9 +51,12 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                 resolve([]);
                 return;
             }
+            console.log("listBankAccounts", bankAccounts.data)
             const filteredlist = bankAccounts.data
                 .reduce((filtered, bankAccount) => {
-                    const label = `${bankAccount.currency_name}: ${bankAccount.balance} ${bankAccount.currency_code} (${bankAccount.id})`;
+                    //TODO fix update label on data invalidation
+                    console.log("listBankAccounts filtered", filtered)
+                    const label = `${bankAccount.currency_name}: ${Number(bankAccount.balance).toFixed(2)} ${bankAccount.currency_code} (${bankAccount.id})`;
                     if (label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase())) {
                         filtered.push({
                             value: bankAccount.id,
@@ -62,6 +65,7 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                     }
                     return filtered;
                 }, [] as selectBankAccountList)
+            console.log("listBankAccounts filtered", filteredlist)
             resolve(filteredlist)
         });
     }
