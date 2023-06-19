@@ -16,13 +16,6 @@ const newTransactionSchema: toZod<Required<Omit<Insertable<Database["Transaction
 
 type newTransactionType = z.infer<typeof newTransactionSchema>;
 
-const foo = newTransactionSchema.pick({
-    sender_account_id: true,
-    receiver_account_id: true,
-    sender_payment_ammount: true,
-}).extend({ type: z.literal('send') });
-
-foo.extend({ sender_account_id: z.string().uuid().refine((val) => val.includes('a')) })
 const newTransactionClientSchema = z.union([
     newTransactionSchema.pick({
         sender_account_id: true,
@@ -37,6 +30,27 @@ const newTransactionClientSchema = z.union([
 ])
 
 type newTransactionClientType = z.infer<typeof newTransactionClientSchema>;
+
+
+const newATMTransactionClientSchema = z.union([
+    newTransactionSchema.pick({
+        receiver_account_id: true,
+        receiver_payment_ammount: true,
+    }).extend({ 
+        type: z.literal('deposit'),
+        receiver_payment_ammount: z.number().max(MAX_TRANSACTION).min(-MAX_TRANSACTION),
+ }),
+    newTransactionSchema.pick({
+        receiver_account_id: true,
+        receiver_payment_ammount: true,
+    }).extend({ 
+        type: z.literal('withdraw'),
+        receiver_payment_ammount: z.number().max(MAX_TRANSACTION).min(-MAX_TRANSACTION),
+}),
+])
+
+type newATMTransactionClientType = z.infer<typeof newATMTransactionClientSchema>;
+
 
 const listAccountTransactionHistorySchema = BankAccountIdentifierSchema
     .extend({
@@ -55,9 +69,11 @@ type listAccountTransactionHistoryClientType = z.infer<typeof listAccountTransac
 
 export type {
     newTransactionType, newTransactionClientType,
-    listAccountTransactionHistoryType, listAccountTransactionHistoryClientType
+    listAccountTransactionHistoryType, listAccountTransactionHistoryClientType,
+    newATMTransactionClientType
 };
 export {
     newTransactionSchema, newTransactionClientSchema,
-    listAccountTransactionHistorySchema, listAccountTransactionHistoryClientSchema
+    listAccountTransactionHistorySchema, listAccountTransactionHistoryClientSchema,
+    newATMTransactionClientSchema
 };

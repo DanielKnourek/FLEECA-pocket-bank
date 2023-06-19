@@ -45,10 +45,10 @@ interface BankAccountMemberTable {
 
 interface TransactionLogTable {
     id: Generated<number>,
-    sender_id: UserAccountTable['id'],
-    sender_account_id: BankAccountTable['id'],
+    sender_id: Required<UserAccountTable['id']>,
+    sender_account_id: Required<BankAccountTable['id']>,
     sender_payment_ammount: number,
-    receiver_account_id: BankAccountTable['id'],
+    receiver_account_id: Required<BankAccountTable['id']>,
     receiver_payment_ammount: number,
     successful: boolean,
     created_at: ColumnType<Date, Date | undefined, never>,
@@ -61,7 +61,7 @@ interface CurrentExchangeRateView {
     currency_name: Database['ExchangeRate']['currency_name'];
     price_ammout: Database['ExchangeRate']['price_ammout'];
     qty_ammout: Database['ExchangeRate']['qty_ammout'];
-  }
+}
 
 export type {
     Database

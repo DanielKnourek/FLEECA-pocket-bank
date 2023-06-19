@@ -1,39 +1,47 @@
-import { newTransactionClientSchema, newTransactionClientType } from "@/types/transaction";
+import Layout from "@/components/Layout";
+import { useUser } from "@/components/useUser";
+import { NextPage } from "next";
+import { signIn } from "next-auth/react";
+import { CreateBankAccountForm } from '@/components/CreateBankAccountForm'
+import { BankAccountList } from "@/components/BankAccountList";
+import { MakeTransactionForm } from "@/components/MakeTransactionForm";
+import { newATMTransactionClientSchema, newATMTransactionClientType, newTransactionClientType } from "@/types/transaction";
 import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import AsyncSelect from "react-select/async";
-import { SubmitWithState, useSubmitWithState } from "./SubmitWithState";
+import { useSubmitWithState } from "@/components/SubmitWithState";
+import { useEffect } from "react";
 
-interface MakeTransactionFormParams {
-}
 
-const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
-    const apiContext = api.useContext();
-    const resolverSchema = newTransactionClientSchema.refine(async (data) => {
-        return await apiContext.bankAccount.getBankAccountPublicInformation.fetch({ bankAccount_id: data.receiver_account_id })
-            .then(data => true)
-            .catch(err => false);
-    }, {
-        message: "This Account doesn't exists!",
-        path: ['receiver_account_id'],
-    });
+const UserAccount: NextPage = () => {
+    const resolverSchema = newATMTransactionClientSchema;
 
-    const { handleSubmit, formState: { errors }, control, register, watch } = useForm<newTransactionClientType>({
+    const { handleSubmit, formState: { errors }, control, register, watch } = useForm<newATMTransactionClientType>({
         resolver: zodResolver(resolverSchema, { async: true }),
         defaultValues: {
-            type: 'send',
+            type: 'deposit',
         }
     });
     const SubmitButton = useSubmitWithState();
 
-    const processTransaction = api.transaction.processTransaction.useMutation();
+    const processATMTransaction = api.transaction.processATMTransaction.useMutation();
     const bankAccounts = api.bankAccount.listOwnerBankAccounts.useQuery();
 
 
-    const processTransactionSubmit = async (data: newTransactionClientType) => {
+    const processTransactionSubmit = async (data: newATMTransactionClientType) => {
         SubmitButton.set('loading');
-        await processTransaction.mutateAsync(data)
+        // TODO better transform method
+        const transformedData: newATMTransactionClientType = (data.type == 'deposit') ? {
+            type: 'deposit',
+            receiver_account_id: data.receiver_account_id,
+            receiver_payment_ammount: data.receiver_payment_ammount
+        } : {
+            type: 'withdraw',
+            receiver_account_id: data.receiver_account_id,
+            receiver_payment_ammount: -data.receiver_payment_ammount,
+        }
+        await processATMTransaction.mutateAsync(transformedData)
             .then(data => {
                 SubmitButton.set('success');
             })
@@ -51,11 +59,9 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                 resolve([]);
                 return;
             }
-            console.log("listBankAccounts", bankAccounts.data)
             const filteredlist = bankAccounts.data
                 .reduce((filtered, bankAccount) => {
                     //TODO fix update label on data invalidation
-                    console.log("listBankAccounts filtered", filtered)
                     const label = `${bankAccount.currency_name}: ${Number(bankAccount.balance).toFixed(2)} ${bankAccount.currency_code} (${bankAccount.id})`;
                     if (label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase())) {
                         filtered.push({
@@ -65,13 +71,14 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                     }
                     return filtered;
                 }, [] as selectBankAccountList)
-            console.log("listBankAccounts filtered", filteredlist)
             resolve(filteredlist)
         });
     }
 
+    console.log(errors); //TODO remove
+
     return (
-        <section className=""
+        <Layout requireSession={true}><section className=""
         >
             <form className="flex flex-col bg-primary rounded-t-xl rounded-b-xl m-2 p-2"
                 onSubmit={handleSubmit(processTransactionSubmit)}
@@ -81,12 +88,12 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                         <label className="m-2 font-bold">
                             Select account for payment.
                         </label>
-                        {errors.sender_account_id && <span className="bg-red-500 text-white px-2 rounded-xl text-sm">{errors.sender_account_id.message}</span>}
+                        {errors.receiver_account_id && <span className="bg-red-500 text-white px-2 rounded-xl text-sm">{errors.receiver_account_id.message}</span>}
                     </div>
                     {
                         !!bankAccounts?.data ?
                             <Controller
-                                name="sender_account_id"
+                                name="receiver_account_id"
                                 control={control}
                                 rules={{ required: true }}
                                 render={({ field: { onChange, onBlur, value, name, ref } }) => (
@@ -104,45 +111,19 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                 </div>
 
                 <div className="bg-secondary h-1 w-full"></div>
+
                 <div className="my-2 w-full flex flex-col">
                     <div>
                         <label className="m-2 font-bold">
-                            Target account
+                            Ammount to be transfered.
                         </label>
-                        {errors.receiver_account_id && <span className="bg-red-500 text-white px-2 rounded-xl text-sm">{errors.receiver_account_id.message}</span>}
                     </div>
                     <input className="appearance-none p-2"
-                        type="text"
-                        {...register('receiver_account_id')}
+                        type="number"
+                        {...register('receiver_payment_ammount', { valueAsNumber: true })}
                     />
                 </div>
-                <div className="bg-secondary h-1 w-full"></div>
-                {
-                    watch('type') == 'send' ?
-                        <div className="my-2 w-full flex flex-col">
-                            <div>
-                                <label className="m-2 font-bold">
-                                    Ammount to be transfered.
-                                </label>
-                            </div>
-                            <input className="appearance-none p-2"
-                                type="number"
-                                {...register('sender_payment_ammount', { valueAsNumber: true })}
-                            />
-                        </div>
-                        :
-                        <div className="my-2 w-full flex flex-col">
-                            <div>
-                                <label className="m-2 font-bold">
-                                    Ammount to be transfered.
-                                </label>
-                            </div>
-                            <input className="appearance-none p-2"
-                                type="number"
-                                {...register('receiver_payment_ammount', { valueAsNumber: true })}
-                            />
-                        </div>
-                }
+
                 <div className="bg-secondary h-1 w-full"></div>
                 <div className="my-2 w-full flex flex-col">
                     <div>
@@ -152,20 +133,20 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                         {errors.type && <span className="bg-red-500 text-white px-2 rounded-xl text-sm">{errors.type.message}</span>}
                     </div>
                     <div className="w-full flex flex-row justify-items-center">
-                        <label className={`p-2 text-white font-bold grow rounded-l-lg ${watch('type') == 'send' ? 'bg-secondary' : 'bg-primary'} border-secondary border-4 justify-center flex shadow-xl`}>
-                            send
+                        <label className={`p-2 text-white font-bold grow rounded-l-lg ${watch('type') == 'deposit' ? 'bg-secondary' : 'bg-primary'} border-secondary border-4 justify-center flex shadow-xl`}>
+                            Deposit
                             <input className="appearance-none"
                                 type="radio"
-                                value='send'
+                                value='deposit'
                                 {...register('type')}
                             />
                         </label>
                         <div className="w-2 bg-primary"></div>
-                        <label className={`p-2 text-white font-bold grow rounded-r-lg ${watch('type') == 'pay' ? 'bg-secondary' : 'bg-primary'} border-secondary border-4 justify-center flex shadow-xl`}>
-                            pay
+                        <label className={`p-2 text-white font-bold grow rounded-r-lg ${watch('type') == 'withdraw' ? 'bg-secondary' : 'bg-primary'} border-secondary border-4 justify-center flex shadow-xl`}>
+                            Withdraw
                             <input className="appearance-none"
                                 type="radio"
-                                value='pay'
+                                value='withdraw'
                                 {...register('type')}
                             />
                         </label>
@@ -179,7 +160,7 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                 />
             </form>
         </section>
+        </Layout>
     )
 }
-
-export { MakeTransactionForm }
+export default UserAccount;

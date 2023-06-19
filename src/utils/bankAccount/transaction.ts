@@ -1,10 +1,62 @@
 import { Database } from "@/server/db/db-schema";
-import { listAccountTransactionHistoryType, newTransactionClientType } from "@/types/transaction";
+import { listAccountTransactionHistoryType, newATMTransactionClientType, newTransactionClientType } from "@/types/transaction";
 import { InsertQueryBuilder, InsertResult, Insertable, Selectable, UpdateQueryBuilder, UpdateResult } from "kysely";
 import { getBankAccountPublicInformation, getOwnerBankAccounts } from "./bankAccount";
 import { calculateExchangeRate } from "../exchangeRate";
 import { db, useDB } from "@/server/db";
 import { BankAccountIdentifierSchema, BankAccountIdentifierType } from "@/types/bankAccount";
+
+
+interface processATMTransactionParams {
+    transaction: newATMTransactionClientType,
+    owner_id: Selectable<Database['UserAccount']>['id']
+}
+
+const processATMTransaction = async ({ owner_id, transaction }: processATMTransactionParams) => {
+    const [senderAccounts] = await Promise.all([
+        getOwnerBankAccounts(owner_id),
+    ])
+
+    const reciverAccount = findBankAccount({ senderAccounts, sender_account_id: transaction.receiver_account_id })
+    if (!reciverAccount) {
+        return {
+            success: false,
+            // TODO error message
+            error: Error('cannot find account')
+        } as processTransactionResponseError;
+    }
+
+    const successful = canTransactionSuccess({
+        sender: reciverAccount,
+        convertedPayment: {
+            source_amount: -transaction.receiver_payment_ammount,
+            target_amount: -transaction.receiver_payment_ammount,
+            source_currency_code: transaction.receiver_account_id,
+            target_currency_code: reciverAccount.currency_code
+        }
+    })
+
+    if (!successful) {
+        // TODO format error message
+        throw Error("BAD_REQUEST");
+    }
+
+    const processedTransaction = performTransactions({
+        transactions: [{
+            success: successful,
+            transaction: {
+                receiver_payment_ammount: transaction.receiver_payment_ammount,
+                receiver_account_id: transaction.receiver_account_id,
+                successful,
+                sender_payment_ammount: transaction.receiver_payment_ammount,
+                sender_account_id: '00000000-0000-0000-0000-000000000000',
+            }
+        }],
+        sender_id: '11111111-1111-1111-1111-111111111111',
+    })
+
+    return await processedTransaction;
+}
 
 interface processTransactionBatchParams {
     transactions: newTransactionClientType[],
@@ -42,6 +94,14 @@ const processTransactionBatch = async ({ owner_id, transactions }: processTransa
     return (processedTransactions as processTransactionResponseSuccess[]);
 }
 
+interface findSenderParams {
+    senderAccounts: Awaited<ReturnType<typeof getOwnerBankAccounts>>;
+    sender_account_id: processTransactionBatchParams['transactions'][number]['sender_account_id'];
+}
+const findBankAccount = ({ senderAccounts, sender_account_id }: findSenderParams) => {
+    return senderAccounts.find((account => account.id == sender_account_id));
+}
+
 interface processTransactionParams {
     senderAccounts: Awaited<ReturnType<typeof getOwnerBankAccounts>>;
     reciever: Awaited<ReturnType<typeof getBankAccountPublicInformation>>;
@@ -52,6 +112,7 @@ interface processTransactionResponseSuccess {
     success: true,
     transaction: Insertable<Database['TransactionLog']>,
 }
+
 interface processTransactionResponseError {
     success: false,
     error: any,
@@ -67,7 +128,7 @@ const processTransaction = async ({ reciever, senderAccounts, transaction }: pro
 
     // Does sender have enough balance
 
-    const sender = senderAccounts.find((account => account.id == transaction.sender_account_id));
+    const sender = findBankAccount({ senderAccounts, sender_account_id: transaction.sender_account_id });
     if (!sender || !reciever) {
         return {
             success: false,
@@ -174,4 +235,4 @@ const listAccountTransactionHistory = async ({ id, page = 0, owner_id }: listAcc
         .execute();
 }
 
-export { processTransactionBatch, listAccountTransactionHistory }
+export { processTransactionBatch, listAccountTransactionHistory, processATMTransaction }
