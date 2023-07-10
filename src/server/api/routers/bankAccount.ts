@@ -30,23 +30,36 @@ const bankAccountRouter = createTRPCRouter({
                 throw new TRPCError({ code: "UNAUTHORIZED", message: "Problem while authorizing session." });
             }
             const result = await getOwnerBankAccounts(ctx.session.userAccount.id);
-            return result;
+
+            return result
+                .sort((a, b) => {
+                    // compare by name if same compare by id
+                    const nameDiff = a.currency_code.localeCompare(b.currency_code);
+
+                    if (nameDiff != 0) {
+                        return nameDiff;
+                    }
+                    const idDiff = a.id.localeCompare(b.id);
+
+                    return idDiff;
+
+                });
         }),
-    
+
     getBankAccountPublicInformation: publicProcedure
-    .input(z.object({bankAccount_id: z.string()}))
-    .query(async ({input}) => {
-        const result = await getBankAccountPublicInformation(input.bankAccount_id);
+        .input(z.object({ bankAccount_id: z.string() }))
+        .query(async ({ input }) => {
+            const result = await getBankAccountPublicInformation(input.bankAccount_id);
 
-        if(!result) {
-            throw new TRPCError({ code: "BAD_REQUEST", message: "This account doesnt exists" });
-        }
+            if (!result) {
+                throw new TRPCError({ code: "BAD_REQUEST", message: "This account doesnt exists" });
+            }
 
-        return {
-            id: result.id,
-            currency_code: result.currency_code
-        }
-    }),
+            return {
+                id: result.id,
+                currency_code: result.currency_code
+            }
+        }),
 
     deleteEmptyAccount: protectedProcedure
         .input(BankAccountIdentifierSchema)
@@ -56,7 +69,7 @@ const bankAccountRouter = createTRPCRouter({
             }
 
             const result = await deleteEmptyAccount({
-                bankAccount_id: input.id, 
+                bankAccount_id: input.id,
                 owner_id: ctx.session.userAccount.id
             })
 
