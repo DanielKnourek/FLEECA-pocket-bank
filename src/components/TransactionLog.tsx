@@ -30,7 +30,7 @@ const TransactionLogList = ({ account }: TransactionLogListParams) => {
                     accountTransactions.data ? accountTransactions.data.map(transaction => {
                         const TransactionDirection: TransactionLogParams['direction'] = transaction.sender_account_id == account.id ? 'outgoing' : 'incoming';
                         return (
-                            <TransactionLog data={transaction} direction={TransactionDirection} />
+                            <TransactionLog data={transaction} direction={TransactionDirection} key={transaction.id} />
                         )
                     }) : "No records."
                 }
@@ -57,7 +57,7 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
                 <div className="w-1 bg-secondary h-full"></div>
                 <div className="col-span-4 flex flex-row ">
                     <MdOutlineArrowBack />
-                    {data.sender_account_id}
+                {data.receiver_account_id == '00000000-0000-0000-0000-000000000000' ? 'ATM':data.receiver_account_id} 
                 </div>
                 <div className="w-1 bg-secondary h-full"></div>
                 {new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium', dateStyle: "medium" }).format(data.created_at)}
@@ -73,7 +73,7 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
             <div className="w-1 bg-secondary h-full"></div>
             <div className="col-span-4 flex flex-row ">
                 <MdOutlineArrowForward />
-                {data.receiver_account_id}
+                {data.receiver_account_id == '00000000-0000-0000-0000-000000000000' ? 'ATM':data.receiver_account_id} 
             </div>
             <div className="w-1 bg-secondary h-full"></div>
             {new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium', dateStyle: "medium" }).format(data.created_at)}
