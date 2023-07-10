@@ -1,5 +1,6 @@
 import { OwnerBankAccountListType } from "@/types/bankAccount";
 import { RouterOutputs, api } from "@/utils/api";
+import { ATMBankAccountID } from "@/utils/bankAccount/bankAccount";
 import { useState } from "react";
 import { MdAddCircleOutline, MdExpandMore, MdOutlineArrowBack, MdOutlineArrowForward, MdOutlineIndeterminateCheckBox } from "react-icons/md";
 
@@ -57,7 +58,7 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
                 <div className="w-1 bg-secondary h-full"></div>
                 <div className="col-span-4 flex flex-row ">
                     <MdOutlineArrowBack />
-                {data.receiver_account_id == '00000000-0000-0000-0000-000000000000' ? 'ATM':data.receiver_account_id} 
+                {data.receiver_account_id == ATMBankAccountID ? 'ATM':data.receiver_account_id} 
                 </div>
                 <div className="w-1 bg-secondary h-full"></div>
                 {new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium', dateStyle: "medium" }).format(data.created_at)}
@@ -73,7 +74,7 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
             <div className="w-1 bg-secondary h-full"></div>
             <div className="col-span-4 flex flex-row ">
                 <MdOutlineArrowForward />
-                {data.receiver_account_id == '00000000-0000-0000-0000-000000000000' ? 'ATM':data.receiver_account_id} 
+                {data.receiver_account_id == ATMBankAccountID ? 'ATM':data.receiver_account_id} 
             </div>
             <div className="w-1 bg-secondary h-full"></div>
             {new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium', dateStyle: "medium" }).format(data.created_at)}

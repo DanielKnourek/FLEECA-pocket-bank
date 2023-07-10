@@ -3,6 +3,8 @@ import { Database } from "@/server/db/db-schema";
 import { newBankAccountType } from "@/types/bankAccount";
 import { DeleteResult, InsertResult, Insertable, Selectable } from "kysely";
 
+const ATMBankAccountID = '00000000-0000-0000-0000-000000000000';
+
 interface createBankAccountResponseSuccess {
     success: true,
     userData: InsertResult,
@@ -105,4 +107,4 @@ const deleteEmptyAccount = async ({ bankAccount_id, owner_id }: deleteEmptyAccou
         });
 }
 
-export { createBankAccount, getOwnerBankAccounts, deleteEmptyAccount, getBankAccountPublicInformation };
+export { ATMBankAccountID, createBankAccount, getOwnerBankAccounts, deleteEmptyAccount, getBankAccountPublicInformation };

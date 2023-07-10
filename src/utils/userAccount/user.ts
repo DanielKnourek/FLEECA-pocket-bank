@@ -3,6 +3,7 @@ import { Database } from "@/server/db/db-schema"
 import { newUserType } from "@/types/userAccount"
 import { InsertResult, Insertable, Selectable } from "kysely"
 
+const ATMUserAccountID = '11111111-1111-1111-1111-111111111111';
 
 interface createUserResponseSuccess {
     success: true,
@@ -42,4 +43,4 @@ const isRegistered = async (user: isRegisteredParams): Promise<Selectable<Databa
 }
 
 export type { isRegisteredParams };
-export { createUser, isRegistered };
+export { createUser, isRegistered, ATMUserAccountID };
