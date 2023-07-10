@@ -127,6 +127,7 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                             </div>
                             <input className="appearance-none p-2"
                                 type="number"
+                                step={"0.01"}
                                 {...register('sender_payment_ammount', { valueAsNumber: true })}
                             />
                         </div>
@@ -139,6 +140,7 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                             </div>
                             <input className="appearance-none p-2"
                                 type="number"
+                                step={"0.01"}
                                 {...register('receiver_payment_ammount', { valueAsNumber: true })}
                             />
                         </div>
