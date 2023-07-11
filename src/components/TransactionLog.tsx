@@ -1,6 +1,7 @@
 import { env } from "@/env.mjs";
 import { OwnerBankAccountListType } from "@/types/bankAccount";
 import { RouterOutputs, api } from "@/utils/api";
+import { checkForAlias } from "@/utils/bankAccount/alias";
 import { ATMBankAccountID } from "@/utils/bankAccount/bankAccount";
 import { useState } from "react";
 import { MdAddCircleOutline, MdExpandMore, MdOutlineArrowBack, MdOutlineArrowForward, MdOutlineIndeterminateCheckBox } from "react-icons/md";
@@ -59,7 +60,7 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
                 <div className="w-1 bg-secondary h-full"></div>
                 <div className="col-span-4 flex flex-row ">
                     <MdOutlineArrowBack />
-                {data.sender_account_id == env.NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID ? 'ATM':data.sender_account_id} 
+                {checkForAlias(data.sender_account_id) ?? data.sender_account_id} 
                 </div>
                 <div className="w-1 bg-secondary h-full"></div>
                 {new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium', dateStyle: "medium" }).format(data.created_at)}
@@ -75,7 +76,7 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
             <div className="w-1 bg-secondary h-full"></div>
             <div className="col-span-4 flex flex-row ">
                 <MdOutlineArrowForward />
-                {data.receiver_account_id == env.NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID ? 'ATM':data.receiver_account_id} 
+                {checkForAlias(data.receiver_account_id) ?? data.receiver_account_id} 
             </div>
             <div className="w-1 bg-secondary h-full"></div>
             {new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium', dateStyle: "medium" }).format(data.created_at)}
