@@ -1,10 +1,10 @@
 import { Database } from "@/server/db/db-schema";
 import { listAccountTransactionHistoryType, newATMTransactionClientType, newTransactionClientType } from "@/types/transaction";
-import { InsertQueryBuilder, InsertResult, Insertable, Selectable, UpdateQueryBuilder, UpdateResult } from "kysely";
+import { InsertResult, Insertable, Selectable, UpdateQueryBuilder, UpdateResult } from "kysely";
 import { getBankAccountPublicInformation, getOwnerBankAccounts } from "./bankAccount";
 import { calculateExchangeRate } from "../exchangeRate";
-import { db, useDB } from "@/server/db";
-import { BankAccountIdentifierSchema, BankAccountIdentifierType } from "@/types/bankAccount";
+import { useDB } from "@/server/db";
+import { env } from "@/env.mjs";
 
 
 interface processATMTransactionParams {
@@ -26,7 +26,7 @@ const processATMTransaction = async ({ owner_id, transaction }: processATMTransa
         } as processTransactionResponseError;
     }
 
-    const successful = canTransactionSuccess({
+    const [successful, transformedTransaction] = transactionTranformValidate({
         sender: reciverAccount,
         convertedPayment: {
             source_amount: -transaction.receiver_payment_ammount,
@@ -36,24 +36,46 @@ const processATMTransaction = async ({ owner_id, transaction }: processATMTransa
         }
     })
 
+    transformedTransaction.source_amount *= -1;
+    
     if (!successful) {
         // TODO format error message
         throw Error("BAD_REQUEST");
     }
 
-    const processedTransaction = performTransactions({
-        transactions: [{
-            success: successful,
-            transaction: {
-                receiver_payment_ammount: transaction.receiver_payment_ammount,
-                receiver_account_id: transaction.receiver_account_id,
-                successful,
-                sender_payment_ammount: transaction.receiver_payment_ammount,
-                sender_account_id: '00000000-0000-0000-0000-000000000000',
-            }
-        }],
-        sender_id: '11111111-1111-1111-1111-111111111111',
-    })
+    let processedTransaction: Promise<void>;
+
+    if (transformedTransaction.source_amount < 0) {
+        // withrawal
+        processedTransaction = performTransactions({
+            transactions: [{
+                success: successful,
+                transaction: {
+                    receiver_payment_ammount: -transformedTransaction.source_amount,
+                    receiver_account_id: env.NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID,
+                    successful,
+                    sender_payment_ammount: -transformedTransaction.source_amount,
+                    sender_account_id: transaction.receiver_account_id,
+                }
+            }],
+            sender_id: env.NEXT_PUBLIC_SYSTEM_ATM_USERACCOUNT_ID,
+        })
+    } else {
+        // deposit
+        processedTransaction = performTransactions({
+            transactions: [{
+                success: successful,
+                transaction: {
+                    receiver_payment_ammount: transformedTransaction.source_amount,
+                    receiver_account_id: transaction.receiver_account_id,
+                    successful,
+                    sender_payment_ammount: transformedTransaction.source_amount,
+                    sender_account_id: env.NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID,
+                }
+            }],
+            sender_id: env.NEXT_PUBLIC_SYSTEM_ATM_USERACCOUNT_ID,
+        })
+    }
 
     return await processedTransaction;
 }
@@ -156,7 +178,9 @@ const processTransaction = async ({ reciever, senderAccounts, transaction }: pro
         }
     }
 
-    const successful = canTransactionSuccess({ sender, convertedPayment });
+    let successful: transactionTranformValidateReturn[0] = true;
+
+    [successful, convertedPayment] = transactionTranformValidate({ sender, convertedPayment });
 
     return {
         transaction: {
@@ -170,17 +194,63 @@ const processTransaction = async ({ reciever, senderAccounts, transaction }: pro
     } as processTransactionResponseSuccess;
 }
 
-interface canTransactionSuccessParams {
+interface transactionTranformValidateParams {
     sender: processTransactionParams['senderAccounts'][number]
     convertedPayment: Awaited<ReturnType<typeof calculateExchangeRate>>
 }
 
-const canTransactionSuccess = ({ sender, convertedPayment }: canTransactionSuccessParams) => {
-    let success = true;
-    success = (sender.balance - convertedPayment.source_amount) > 0;
+type transactionTranformValidateReturn = [
+    success: boolean,
+    convertedPayment: transactionTranformValidateParams['convertedPayment'],
+]
 
-    return success
+
+const transactionTranformValidate = ({ sender, convertedPayment }: transactionTranformValidateParams): transactionTranformValidateReturn => {
+    let [success_res, convertedPayment_res] = [true, convertedPayment];
+
+    [success_res, convertedPayment_res] = canTransactionSuccess({ sender, convertedPayment: convertedPayment_res });
+
+    if (success_res) {
+        return [success_res, convertedPayment_res];
+    }
+
+    [success_res, convertedPayment_res] = transactionTranformWithCorrectionValidate({ sender, convertedPayment: convertedPayment_res });
+
+    return [success_res, convertedPayment_res];
 }
+
+const canTransactionSuccess = ({ sender, convertedPayment }: transactionTranformValidateParams): transactionTranformValidateReturn => {
+    let success = true;
+    success = (sender.balance - convertedPayment.source_amount) >= 0;
+
+    return [success, convertedPayment];
+}
+
+const transactionTranformWithCorrectionValidate = ({ sender, convertedPayment }: transactionTranformValidateParams): transactionTranformValidateReturn => {
+    const CORRECTION_LIMIT = 1.1;
+    const CORRECTION_TAX = 1.1;
+
+    let [success_res, convertedPayment_res] = [true, convertedPayment];
+
+    const sender_corrected: typeof sender = {
+        ...sender,
+        balance: sender.balance * CORRECTION_LIMIT,
+    };
+
+    [success_res, convertedPayment_res] = canTransactionSuccess({ sender: sender_corrected, convertedPayment: convertedPayment_res });
+
+    if (!success_res) {
+        return [success_res, convertedPayment];
+    }
+
+    convertedPayment_res = {
+        ...convertedPayment_res,
+        source_amount: convertedPayment_res.source_amount + (convertedPayment_res.source_amount - sender.balance) * (CORRECTION_TAX - 1),
+    }
+
+    return [success_res, convertedPayment_res];
+}
+
 interface performTransactionsParams {
     transactions: processTransactionResponseSuccess[],
     sender_id: string,
