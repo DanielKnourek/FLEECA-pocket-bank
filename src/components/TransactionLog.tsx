@@ -1,3 +1,4 @@
+import { env } from "@/env.mjs";
 import { OwnerBankAccountListType } from "@/types/bankAccount";
 import { RouterOutputs, api } from "@/utils/api";
 import { ATMBankAccountID } from "@/utils/bankAccount/bankAccount";
@@ -58,7 +59,7 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
                 <div className="w-1 bg-secondary h-full"></div>
                 <div className="col-span-4 flex flex-row ">
                     <MdOutlineArrowBack />
-                {data.receiver_account_id == ATMBankAccountID ? 'ATM':data.receiver_account_id} 
+                {data.receiver_account_id == env.NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID ? 'ATM':data.receiver_account_id} 
                 </div>
                 <div className="w-1 bg-secondary h-full"></div>
                 {new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium', dateStyle: "medium" }).format(data.created_at)}
@@ -74,7 +75,7 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
             <div className="w-1 bg-secondary h-full"></div>
             <div className="col-span-4 flex flex-row ">
                 <MdOutlineArrowForward />
-                {data.receiver_account_id == ATMBankAccountID ? 'ATM':data.receiver_account_id} 
+                {data.receiver_account_id == env.NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID ? 'ATM':data.receiver_account_id} 
             </div>
             <div className="w-1 bg-secondary h-full"></div>
             {new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium', dateStyle: "medium" }).format(data.created_at)}
