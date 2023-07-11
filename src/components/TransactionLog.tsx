@@ -59,7 +59,7 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
                 <div className="w-1 bg-secondary h-full"></div>
                 <div className="col-span-4 flex flex-row ">
                     <MdOutlineArrowBack />
-                {data.receiver_account_id == env.NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID ? 'ATM':data.receiver_account_id} 
+                {data.sender_account_id == env.NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID ? 'ATM':data.sender_account_id} 
                 </div>
                 <div className="w-1 bg-secondary h-full"></div>
                 {new Intl.DateTimeFormat('cs-CZ', { timeStyle: 'medium', dateStyle: "medium" }).format(data.created_at)}
