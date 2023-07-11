@@ -91,7 +91,8 @@ const deleteEmptyAccount = async ({ bankAccount_id, owner_id }: deleteEmptyAccou
     return await useDB.deleteFrom('BankAccount')
         .where('BankAccount.id', '=', bankAccount_id)
         .where('BankAccount.owner_id', '=', owner_id)
-        .where('BankAccount.balance', '=', 0)
+        .where('BankAccount.balance', '>=', 0)
+        .where('BankAccount.balance', '<', 1)
         .executeTakeFirstOrThrow()
         .then(res => {
             return {
