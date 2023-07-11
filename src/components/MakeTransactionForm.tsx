@@ -55,7 +55,6 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
             const filteredlist = bankAccounts.data
                 .reduce((filtered, bankAccount) => {
                     //TODO fix update label on data invalidation
-                    console.log("listBankAccounts filtered", filtered)
                     const label = `${bankAccount.currency_name}: ${Number(bankAccount.balance).toFixed(2)} ${bankAccount.currency_code} (${bankAccount.id})`;
                     if (label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase())) {
                         filtered.push({
@@ -65,7 +64,6 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                     }
                     return filtered;
                 }, [] as selectBankAccountList)
-            console.log("listBankAccounts filtered", filteredlist)
             resolve(filteredlist)
         });
     }
