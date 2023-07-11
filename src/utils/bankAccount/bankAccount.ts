@@ -1,7 +1,7 @@
-import { db, useDB } from "@/server/db";
+import { useDB } from "@/server/db";
 import { Database } from "@/server/db/db-schema";
 import { newBankAccountType } from "@/types/bankAccount";
-import { DeleteResult, InsertResult, Insertable, Selectable } from "kysely";
+import { DeleteResult, InsertResult, Selectable } from "kysely";
 
 const ATMBankAccountID = '00000000-0000-0000-0000-000000000000';
 
