@@ -41,5 +41,4 @@ const isRegistered = async (user: isRegisteredParams): Promise<Selectable<Databa
 }
 
 export type { isRegisteredParams };
-export { createUser, isRegistered, ATMUserAccountID };
-export { createUser, isRegistered, ATMUserAccountID };
+export { createUser, isRegistered };
