@@ -1,17 +1,12 @@
+import type { NextPage } from "next";
+
+import AsyncSelect from "react-select/async";
 import Layout from "@/components/Layout";
-import { useUser } from "@/components/useUser";
-import { NextPage } from "next";
-import { signIn } from "next-auth/react";
-import { CreateBankAccountForm } from '@/components/CreateBankAccountForm'
-import { BankAccountList } from "@/components/BankAccountList";
-import { MakeTransactionForm } from "@/components/MakeTransactionForm";
-import { newATMTransactionClientSchema, newATMTransactionClientType, newTransactionClientType } from "@/types/transaction";
+import { newATMTransactionClientSchema, type newATMTransactionClientType } from "@/types/transaction";
 import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import AsyncSelect from "react-select/async";
 import { useSubmitWithState } from "@/components/SubmitWithState";
-import { useEffect } from "react";
 
 
 const UserAccount: NextPage = () => {
@@ -81,7 +76,7 @@ const UserAccount: NextPage = () => {
         <Layout requireSession={true}><section className=""
         >
             <form className="flex flex-col bg-primary rounded-t-xl rounded-b-xl m-2 p-2"
-                onSubmit={handleSubmit(processTransactionSubmit)}
+                onSubmit={void handleSubmit(processTransactionSubmit)}
             >
                 <div className="my-2 w-full flex flex-col">
                     <div>
@@ -96,7 +91,7 @@ const UserAccount: NextPage = () => {
                                 name="receiver_account_id"
                                 control={control}
                                 rules={{ required: true }}
-                                render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                                render={({ field: { onChange, onBlur } }) => (
                                     <AsyncSelect cacheOptions
                                         defaultOptions
                                         instanceId={"Account you want to send money form"}

@@ -1,8 +1,9 @@
-import { AppRouter } from "@/server/api/root";
-import { Database } from "@/server/db/db-schema";
-import { inferProcedureOutput } from "@trpc/server";
-import { Insertable, Selectable } from "kysely";
-import { toZod } from "tozod";
+import type { AppRouter } from "@/server/api/root";
+import type { Database } from "@/server/db/db-schema";
+import type { inferProcedureOutput } from "@trpc/server";
+import type { Insertable, Selectable } from "kysely";
+import type { toZod } from "tozod";
+
 import { z } from "zod";
 
 const newBankAccountSchema: toZod<Required<Omit<Insertable<Database["BankAccount"]>, 'id' | 'enabled' | 'created_at'>>> = z.object({

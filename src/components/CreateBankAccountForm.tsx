@@ -1,4 +1,4 @@
-import { newBankAccountClientSchema, newBankAccountClientType } from "@/types/bankAccount";
+import { newBankAccountClientSchema, type newBankAccountClientType } from "@/types/bankAccount";
 import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -6,11 +6,8 @@ import { useForm, Controller } from "react-hook-form";
 import AsyncSelect from 'react-select/async';
 import { SubmitWithState } from "./SubmitWithState";
 
-interface newBankAccountFormParams {
 
-}
-
-const CreateBankAccountForm = ({ }: newBankAccountFormParams) => {
+const CreateBankAccountForm = () => {
     const { handleSubmit, formState: { errors }, control } = useForm<newBankAccountClientType>({ resolver: zodResolver(newBankAccountClientSchema) });
 
     const listOfCurrencies = api.exchangeRate.listCurrencies.useQuery(undefined, { staleTime: 15 * 60 * 1000 });
@@ -21,7 +18,7 @@ const CreateBankAccountForm = ({ }: newBankAccountFormParams) => {
     const createBankAccountSubmit = async (data: newBankAccountClientType) => {
         setFormSubmitState('loading');
 
-        let res = await createBankAccount.mutateAsync(data);
+        const res = await createBankAccount.mutateAsync(data);
         if (res.success) {
             setFormSubmitState('success');
         }
@@ -57,7 +54,7 @@ const CreateBankAccountForm = ({ }: newBankAccountFormParams) => {
             title="Create new bank account."
         >
             <form className="flex flex-col bg-primary rounded-t-xl rounded-b-xl m-2"
-                onSubmit={handleSubmit(createBankAccountSubmit)}
+                onSubmit={void handleSubmit(createBankAccountSubmit)}
             >
                 <div className="p-2 w-full flex flex-col">
                     <div>

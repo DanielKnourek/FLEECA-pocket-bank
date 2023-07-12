@@ -1,4 +1,4 @@
-import { HTMLAttributes, useEffect, useState } from "react";
+import { type HTMLAttributes, useEffect, useState } from "react";
 
 interface SubmitStateParams {
     state?: 'submit' | 'loading' | 'success' | 'error',
@@ -14,7 +14,7 @@ interface useSubmitWithStateParams {
     defaultState?: useSubmitWithStates['states']
 }
 
-const useSubmitWithState = ({ defaultState = undefined }: useSubmitWithStateParams={}) => {
+const useSubmitWithState = ({ defaultState = undefined }: useSubmitWithStateParams = {}) => {
     const [formSubmitState, setFormSubmitState] = useState<useSubmitWithStates['states']>(defaultState);
 
     return {
@@ -56,6 +56,7 @@ const SubmitWithState = ({ value, state, className }: SubmitStateParams) => {
     return (
         <div className="flex flex-col">
             <div
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 className={`submitwithstate-error ${(!state) ? 'h-0 py-0' : 'py-2'} overflow-hidden font-bold text-white text-center ${StateData.className} `}
             >
                 {StateData.message}
@@ -64,6 +65,7 @@ const SubmitWithState = ({ value, state, className }: SubmitStateParams) => {
                 disabled={state == 'loading'}
                 type="submit"
                 value={value}
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 className={`${className} ${(state == 'loading') ? 'cursor-not-allowed' : 'cursor-pointer'} pb-2 pt-2 font-bold rounded-b-xl hover:shadow-xl`}
             />
 

@@ -1,19 +1,16 @@
-import { newTransactionClientSchema, newTransactionClientType } from "@/types/transaction";
+import { newTransactionClientSchema, type newTransactionClientType } from "@/types/transaction";
 import { api } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import AsyncSelect from "react-select/async";
-import { SubmitWithState, useSubmitWithState } from "./SubmitWithState";
+import { useSubmitWithState } from "./SubmitWithState";
 
-interface MakeTransactionFormParams {
-}
-
-const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
+const MakeTransactionForm = () => {
     const apiContext = api.useContext();
     const resolverSchema = newTransactionClientSchema.refine(async (data) => {
         return await apiContext.bankAccount.getBankAccountPublicInformation.fetch({ bankAccount_id: data.receiver_account_id })
-            .then(data => true)
-            .catch(err => false);
+            .then(() => true)
+            .catch(() => false);
     }, {
         message: "This Account doesn't exists!",
         path: ['receiver_account_id'],
@@ -72,7 +69,7 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
         <section className=""
         >
             <form className="flex flex-col bg-primary rounded-t-xl rounded-b-xl m-2 p-2"
-                onSubmit={handleSubmit(processTransactionSubmit)}
+                onSubmit={void handleSubmit(processTransactionSubmit)}
             >
                 <div className="my-2 w-full flex flex-col">
                     <div>
@@ -87,7 +84,7 @@ const MakeTransactionForm = ({ }: MakeTransactionFormParams) => {
                                 name="sender_account_id"
                                 control={control}
                                 rules={{ required: true }}
-                                render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                                render={({ field: { onChange, onBlur } }) => (
                                     <AsyncSelect cacheOptions
                                         defaultOptions
                                         instanceId={"Account you want to send money form"}

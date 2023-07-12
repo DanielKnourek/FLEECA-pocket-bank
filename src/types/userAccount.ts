@@ -1,6 +1,7 @@
-import { Database } from "@/server/db/db-schema";
-import { Insertable } from "kysely";
-import { toZod } from "tozod";
+import type { Database } from "@/server/db/db-schema";
+import type { Insertable } from "kysely";
+import type { toZod } from "tozod";
+
 import { z } from "zod";
 
 const newUserSchema: toZod<Omit<Insertable<Database["UserAccount"]>, 'id' | 'enabled' | 'created_at'>> = z.object({

@@ -1,11 +1,12 @@
+import type { Database } from "@/server/db/db-schema";
+import type { Insertable } from "kysely";
+import type { toZod } from 'tozod'
+import type { currencyExchange } from "@/types/exchangeRate";
+
 import { env } from "@/env.mjs";
-import { Database } from "@/server/db/db-schema";
 import { dsvFormat } from 'd3-dsv';
-import { Insertable } from "kysely";
 import { z } from "zod";
-import { toZod } from 'tozod'
 import { db, useDB } from "@/server/db";
-import { currencyExchange } from "@/types/exchangeRate";
 
 /**
  * Finds and returns latest cached ExchangeRate if exchangeRate is older than 12h it tries to download and update database.
@@ -82,6 +83,7 @@ const getStoredExchangeRate = (currencyCode: string) => {
 }
 
 const parseFloatComma = (input: string | undefined) => {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return parseFloat(`${input}`.replace(/\./g, '').replace(',', '.'));
 }
 
@@ -95,13 +97,13 @@ const ExchangeRateSchema: toZod<Insertable<Database["ExchangeRate"]>> = z.object
 })
 
 const DowloadAndParseDSV = async () => {
-    let dowloadDate: String;
+    let dowloadDate: string;
     const result = await fetch(`${env.CNB_EXCHANGERATE_URI}`)
         .then(res => {
             return res.text();
         })
         .then(text => {
-            let firstlineEnd = text.indexOf('\n');
+            const firstlineEnd = text.indexOf('\n');
             dowloadDate = text.substring(0, firstlineEnd - 1)
             return dsvFormat('|').parse(text.substring(firstlineEnd + 1))
         })

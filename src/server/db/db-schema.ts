@@ -1,4 +1,4 @@
-import { ColumnType, Generated } from "kysely";
+import type { ColumnType, Generated } from "kysely";
 
 interface Database {
     UserAccount: UserAccountTable,

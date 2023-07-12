@@ -1,6 +1,8 @@
-import { Database } from "@/server/db/db-schema";
-import { listAccountTransactionHistoryType, newATMTransactionClientType, newTransactionClientType } from "@/types/transaction";
-import { InsertResult, Insertable, Selectable, UpdateQueryBuilder, UpdateResult } from "kysely";
+import type { Database } from "@/server/db/db-schema";
+import type { listAccountTransactionHistoryType, newATMTransactionClientType, newTransactionClientType } from "@/types/transaction";
+import type { Insertable, Selectable } from "kysely";
+import type { InsertResult, UpdateResult } from "kysely";
+
 import { getBankAccountPublicInformation, getOwnerBankAccounts } from "./bankAccount";
 import { calculateExchangeRate } from "../exchangeRate";
 import { useDB } from "@/server/db";
@@ -37,7 +39,7 @@ const processATMTransaction = async ({ owner_id, transaction }: processATMTransa
     })
 
     transformedTransaction.source_amount *= -1;
-    
+
     if (!successful) {
         // TODO format error message
         throw Error("BAD_REQUEST");
@@ -112,7 +114,7 @@ const processTransactionBatch = async ({ owner_id, transactions }: processTransa
         // TODO format error message
         throw Error("BAD_REQUEST");
     }
-    performTransactions({ transactions: processedTransactions as processTransactionResponseSuccess[], sender_id: owner_id })
+    await performTransactions({ transactions: processedTransactions as processTransactionResponseSuccess[], sender_id: owner_id })
     return (processedTransactions as processTransactionResponseSuccess[]);
 }
 

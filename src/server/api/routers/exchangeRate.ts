@@ -2,9 +2,7 @@ import { z } from "zod";
 import {
     createTRPCRouter,
     publicProcedure,
-    protectedProcedure,
 } from "@/server/api/trpc";
-import { insertUser } from "@/utils/user";
 import { calculateExchangeRate, getAllExchangeRates, getExchangeRate } from "@/utils/exchangeRate";
 import { currencyExchangeSchema } from "@/types/exchangeRate";
 

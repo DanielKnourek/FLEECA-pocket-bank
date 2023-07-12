@@ -1,4 +1,5 @@
-import { OwnerBankAccountListType } from "@/types/bankAccount";
+import type { OwnerBankAccountListType } from "@/types/bankAccount";
+
 import { api } from "@/utils/api";
 import { TransactionLogList } from "./TransactionLog";
 import { MdOutlineDelete } from "react-icons/md";
@@ -21,7 +22,7 @@ const BankAccount = ({ account }: BankAccountParams) => {
     const deleteBankAccount = api.bankAccount.deleteEmptyAccount.useMutation();
 
     const onDelete = async () => {
-        const res = await deleteBankAccount.mutateAsync({ id: account.bank_account_id });
+        await deleteBankAccount.mutateAsync({ id: account.bank_account_id });
     }
 
     return (
@@ -56,7 +57,7 @@ const BankAccount = ({ account }: BankAccountParams) => {
                 <div className="self-center">
                     <button className="bg-secondary rounded-lg"
                         title="Delete account"
-                        onClick={onDelete}
+                        onClick={void onDelete}
                     >
                         <MdOutlineDelete size={25} color="white"/>
                     </button>

@@ -1,7 +1,8 @@
+import type { Database } from "@/server/db/db-schema";
+import type { newBankAccountType } from "@/types/bankAccount";
+import type { DeleteResult, InsertResult, Selectable } from "kysely";
+
 import { useDB } from "@/server/db";
-import { Database } from "@/server/db/db-schema";
-import { newBankAccountType } from "@/types/bankAccount";
-import { DeleteResult, InsertResult, Selectable } from "kysely";
 
 const ATMBankAccountID = '00000000-0000-0000-0000-000000000000';
 
@@ -34,7 +35,7 @@ const createBankAccount = async (newBankAccount: newBankAccountType): Promise<cr
                     userData: res,
                 } as createBankAccountResponseSuccess
             })
-            .catch(err => {
+            .catch((err: Error) => {
                 return {
                     success: false,
                     error: err,
@@ -100,7 +101,7 @@ const deleteEmptyAccount = async ({ bankAccount_id, owner_id }: deleteEmptyAccou
                 userData: res,
             } as deleteEmptyAccountResponseSuccess
         })
-        .catch(err => {
+        .catch((err: Error) => {
             return {
                 success: false,
                 error: err,

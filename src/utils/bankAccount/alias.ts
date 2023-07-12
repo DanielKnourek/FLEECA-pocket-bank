@@ -3,7 +3,7 @@ import { env } from "@/env.mjs"
 interface alias {
     id: string | null,
     alias: string,
-};
+}
 
 const aliasList: alias[] = [
     {
@@ -20,8 +20,8 @@ const aliasList: alias[] = [
     },
 ];
 
-const checkForAlias = (bankAccountID : string) => {
-    const alias = aliasList.find(alias => alias.id == bankAccountID);    
+const checkForAlias = (bankAccountID: string) => {
+    const alias = aliasList.find(alias => alias.id == bankAccountID);
     return alias?.alias;
 }
 

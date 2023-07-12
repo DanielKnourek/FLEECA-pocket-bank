@@ -1,8 +1,7 @@
-import { env } from "@/env.mjs";
-import { OwnerBankAccountListType } from "@/types/bankAccount";
-import { RouterOutputs, api } from "@/utils/api";
+import type { OwnerBankAccountListType } from "@/types/bankAccount";
+
+import { type RouterOutputs, api } from "@/utils/api";
 import { checkForAlias } from "@/utils/bankAccount/alias";
-import { ATMBankAccountID } from "@/utils/bankAccount/bankAccount";
 import { useState } from "react";
 import { MdAddCircleOutline, MdExpandMore, MdOutlineArrowBack, MdOutlineArrowForward, MdOutlineIndeterminateCheckBox } from "react-icons/md";
 

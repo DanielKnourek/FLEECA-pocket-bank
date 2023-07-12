@@ -1,6 +1,6 @@
-import { Database } from "@/server/db/db-schema";
-import { Selectable } from "kysely";
-import { toZod } from "tozod";
+import type { Database } from "@/server/db/db-schema";
+import type { toZod } from "tozod";
+
 import { z } from "zod";
 
 type currencyExchange = {

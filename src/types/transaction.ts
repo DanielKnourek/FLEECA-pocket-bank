@@ -1,6 +1,7 @@
-import { Database } from "@/server/db/db-schema";
-import { Insertable, Selectable } from "kysely";
-import { toZod } from "tozod";
+import type { Database } from "@/server/db/db-schema";
+import type { Insertable } from "kysely";
+import type { toZod } from "tozod";
+
 import { z } from "zod";
 import { BankAccountIdentifierSchema } from "./bankAccount";
 
@@ -36,17 +37,17 @@ const newATMTransactionClientSchema = z.union([
     newTransactionSchema.pick({
         receiver_account_id: true,
         receiver_payment_ammount: true,
-    }).extend({ 
+    }).extend({
         type: z.literal('deposit'),
         receiver_payment_ammount: z.number().max(MAX_TRANSACTION).min(-MAX_TRANSACTION),
- }),
+    }),
     newTransactionSchema.pick({
         receiver_account_id: true,
         receiver_payment_ammount: true,
-    }).extend({ 
+    }).extend({
         type: z.literal('withdraw'),
         receiver_payment_ammount: z.number().max(MAX_TRANSACTION).min(-MAX_TRANSACTION),
-}),
+    }),
 ])
 
 type newATMTransactionClientType = z.infer<typeof newATMTransactionClientSchema>;

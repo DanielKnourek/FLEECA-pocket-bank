@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { IconType } from "react-icons/lib";
 import { MdAtm } from 'react-icons/md'
 import { HiOutlineHome, HiOutlineUser } from 'react-icons/hi'
 import { useRouter } from "next/router";
