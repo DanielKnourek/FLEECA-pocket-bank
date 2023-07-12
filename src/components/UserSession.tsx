@@ -1,6 +1,5 @@
-import { getContextDefaults, useUser, userContextType } from "@/components/useUser"
-import { signIn } from "next-auth/react";
-import { ReactNode, useContext, useEffect, useState } from "react"
+import { type userContextType, useUser } from "@/components/useUser"
+import { type ReactNode, useEffect, useState } from "react"
 import { AccessDenied, Loading } from "@/components/ErrorDisplay";
 import { useRouter } from "next/router";
 
@@ -32,7 +31,8 @@ const UserSession: React.FC<UserSessionParams> = ({ children }) => {
             isError = true;
         }
         if (!isError && (user.session.data?.tokenData?.userAccount?.exists == false)) {
-            push("/account/new");
+            push("/account/new")
+            .catch(err => console.log('Cannot redirect. ', err))
             return;
         }
 

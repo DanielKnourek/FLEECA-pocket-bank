@@ -1,16 +1,16 @@
-import { type GetServerSidePropsContext } from "next";
+import type { GetServerSidePropsContext } from "next";
+import type { DefaultJWT, JWT, UserAccountJWT } from "next-auth/jwt";
+import type { Database } from "./db/db-schema";
+import type { Selectable } from "kysely";
+
 import {
   getServerSession,
   type NextAuthOptions,
   type DefaultSession,
-  Session,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import { env } from "@/env.mjs";
 import { isRegistered, isRegisteredParams } from "@/utils/userAccount/user";
-import { DefaultJWT, JWT, UserAccountJWT } from "next-auth/jwt";
-import { Database } from "./db/db-schema";
-import { Selectable } from "kysely";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -21,13 +21,13 @@ import { Selectable } from "kysely";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     tokenData: JWT;
-    userAccount?: UserAccountJWT["data"];
+    userAccount?: Extract<UserAccountJWT, { exists: true }>['data'];
   }
 }
 declare module "next-auth/jwt" {
   type UserAccountJWT = {
     exists: false,
-    data?: any
+    data?: Selectable<Database['UserAccount']>
   } | {
     exists: true,
     data: Selectable<Database['UserAccount']>
@@ -55,13 +55,11 @@ export const authOptions: NextAuthOptions = {
     newUser: "/account/new",
   },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      let data = { user, account, profile, email, credentials }
+    signIn() {
 
       return true;
-      return '/account/new';
     },
-    async redirect({ url, baseUrl }) {
+    redirect({ url, baseUrl }) {
 
       const getCallbackUri = (params: { url: string, baseUrl: string }) => {
         // Allows relative callback URLs
@@ -75,7 +73,7 @@ export const authOptions: NextAuthOptions = {
       return getCallbackUri({ baseUrl, url });
     },
 
-    async session({ session, token, user }) {
+    session({ session, token }) {
 
       if (token.userAccount) {
         session.tokenData = {
@@ -97,7 +95,9 @@ export const authOptions: NextAuthOptions = {
       let isUser: Selectable<Database['UserAccount']> | undefined;
       if (!token.userAccount || !token.userAccount.exists) {
         const targetUserAccount: isRegisteredParams = {
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           email: `${token.email}`,
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           login_platform_uid: `${token?.provider}`,
         };
 
@@ -107,9 +107,6 @@ export const authOptions: NextAuthOptions = {
             ...token,
             userAccount: {
               exists: false,
-              data: {
-
-              }
             }
           };
         }

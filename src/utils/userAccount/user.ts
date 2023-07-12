@@ -1,8 +1,8 @@
-import { useDB } from "@/server/db"
-import { Database } from "@/server/db/db-schema"
-import { newUserType } from "@/types/userAccount"
-import { InsertResult, Insertable, Selectable } from "kysely"
+import type { Database } from "@/server/db/db-schema"
+import type { newUserType } from "@/types/userAccount"
+import type { InsertResult, Insertable, Selectable } from "kysely"
 
+import { useDB } from "@/server/db"
 
 interface createUserResponseSuccess {
     success: true,

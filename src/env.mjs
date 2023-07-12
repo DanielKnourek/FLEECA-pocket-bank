@@ -44,6 +44,8 @@ export const env = createEnv({
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
     NEXT_PUBLIC_CLIENT_CODENAME: z.string(),
+    NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID: z.string().uuid(),
+    NEXT_PUBLIC_SYSTEM_ATM_USERACCOUNT_ID: z.string().uuid(),
   },
 
   /**
@@ -68,5 +70,9 @@ export const env = createEnv({
     POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
     POSTGRES_DATABASE: process.env.POSTGRES_DATABASE,
     CNB_EXCHANGERATE_URI: process.env.CNB_EXCHANGERATE_URI,
+
+    NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID: '00000000-0000-0000-0000-000000000000',
+    NEXT_PUBLIC_SYSTEM_ATM_USERACCOUNT_ID: '11111111-1111-1111-1111-111111111111',
+
   },
 });

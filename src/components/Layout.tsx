@@ -1,7 +1,5 @@
 import { ReactNode, useContext } from "react";
 import { UserSession } from "./UserSession";
-import { AccessDenied, ErrorDisplay, Loading } from "@/components/ErrorDisplay";
-import { signIn, signOut } from "next-auth/react";
 import { useUser } from "@/components/useUser";
 import { Navbar } from "@/components/Navbar";
 

@@ -54,19 +54,21 @@ describe('exchangeRate', () => {
 
             const result = await exchangeRate.DowloadAndParseDSV();
             expect(result).toBeDefined();
-            expect(result.length).toEqual(6);
+            // 6 + 1 CZK is hardcoded
+            expect(result.length).toEqual(7);
             expect(result[5]?.currency_code).toBe('EUR');
             expect(result[5]?.price_ammout).toEqual(23.755)
         })
 
-        it('returns empty array on error', async () => {
+        it('returns CZK only array on error', async () => {
 
             fetchMocker.doMock("");
 
             const result = await exchangeRate.DowloadAndParseDSV();
             expect(result).toBeDefined();
             
-            expect(result.length).toEqual(0);
+            // CZK is hardcoded
+            expect(result.length).toEqual(1);
         })
     })
 })

@@ -17,6 +17,7 @@ interface userContextType {
     setErrorMessage: Dispatch<SetStateAction<userContextType['errorMessage']>>
 }
 const getContextDefaults = (): userContextType => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [errorMessage, setErrorMessage] = useState<userContextType['errorMessage']>(undefined);
     return {
         setErrorMessage,

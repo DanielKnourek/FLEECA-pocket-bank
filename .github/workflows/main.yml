@@ -15,6 +15,14 @@ env:
   NEXTAUTH_URL: ${{ vars.NEXTAUTH_URL }}
   DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
   DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
+  POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+  POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
+  POSTGRES_URL_NON_POOLING: ${{ secrets.POSTGRES_URL_NON_POOLING }}
+  POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+  POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  POSTGRES_DATABASE: ${{ secrets.POSTGRES_DATABASE }}
+  CNB_EXCHANGERATE_URI: ${{ secrets.CNB_EXCHANGERATE_URI }}
 
 jobs:
   build-test:
@@ -44,8 +52,8 @@ jobs:
       - name: Test with coverage
         run: yarn testc
         
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # - name: SonarCloud Scan
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

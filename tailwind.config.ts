@@ -7,6 +7,13 @@ export default {
       colors: {
         primary: '#39d35f',
         secondary: '#25873d',
+      },
+      transitionProperty: {
+        'height': 'height'
+      },
+      minHeight: {
+        '8': '2rem',
+        '10': '2.5rem',
       }
     },
   },

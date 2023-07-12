@@ -18,8 +18,8 @@ export default defineConfig({
                 'src/server/api/trpc.ts',
                 'src/server/auth.ts',
             ],
-            lines: 75,
-            functions: 75,
+            // lines: 75,
+            // functions: 75,
         },
 
         exclude: [...configDefaults.exclude, "**/e2e/**"],

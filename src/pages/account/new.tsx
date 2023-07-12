@@ -1,45 +1,44 @@
+import type { NextPage } from "next";
+import type { newUserType } from "@/types/userAccount";
+
 import Layout from "@/components/Layout";
-import { Database } from "@/server/db/db-schema";
-import { Insertable } from "kysely";
 import { useUser } from "@/components/useUser";
-import { NextPage } from "next";
-import { signIn } from "next-auth/react";
-import { useContext, useEffect } from "react";
-import { toZod } from "tozod";
-import { z } from "zod";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod'
 // import { newUserSchema } from "@/server/api/routers/user";
 import { api } from "@/utils/api";
-import { newUserSchema, newUserType } from "@/types/userAccount";
+import { newUserSchema } from "@/types/userAccount";
+import { useEffect } from "react";
 
 const UserAccount: NextPage = () => {
     const user = useUser();
-    const usercontext = useContext(user.context);
-
 
     const registerUser = api.user.registerUser.useMutation();
 
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<newUserType>({ resolver: zodResolver(newUserSchema) });
 
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         setValue('email', `${user.session.data?.tokenData.email}`);
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         setValue('login_platform_uid', `${user.session.data?.tokenData.provider}`);
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         setValue('first_name', `${user.session.data?.tokenData.name}`);
     }, [user.session])
 
 
     const createUserSubmit = async (data: newUserType) => {
-        let res = await registerUser.mutateAsync(data);
-
+        await registerUser.mutateAsync(data);
+        // TODO redirect on success
     }
+
     return (
         <Layout>
             Welcome, please fill these so we can get to know you.
             <div className="w-full p-2 flex place-content-center">
 
                 <form className="flex flex-col bg-primary w-full sm:w-1/2 rounded-t-xl rounded-b-xl m-2"
-                    onSubmit={handleSubmit(createUserSubmit)}
+                    onSubmit={void handleSubmit(createUserSubmit)}
                 >
                     <div className="p-2 w-full flex flex-col">
                         <div>
@@ -86,6 +85,7 @@ const UserAccount: NextPage = () => {
                             </label>
                             {errors.last_name && <span className="bg-red-500 text-white px-2 rounded-xl text-sm">{errors.last_name.message}</span>}
                         </div>
+                        {/* TODO implement SubmitWithState */}
                         <input className="p-1"
                             type="text"
                             {...register('last_name')} />
