@@ -34,6 +34,9 @@ export const env = createEnv({
     POSTGRES_DATABASE: z.string(),
 
     CNB_EXCHANGERATE_URI: z.string().url(),
+
+    GOOGLE_CLIENT_ID: z.string().min(1),
+    GOOGLE_CLIENT_SECRET: z.string().min(1),
   },
 
   /**
@@ -73,6 +76,9 @@ export const env = createEnv({
 
     NEXT_PUBLIC_SYSTEM_ATM_BANKACCOUNT_ID: '00000000-0000-0000-0000-000000000000',
     NEXT_PUBLIC_SYSTEM_ATM_USERACCOUNT_ID: '11111111-1111-1111-1111-111111111111',
+
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 
   },
 });
