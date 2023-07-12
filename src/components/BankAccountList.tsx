@@ -57,14 +57,15 @@ const BankAccount = ({ account }: BankAccountParams) => {
                 <div className="self-center">
                     <button className="bg-secondary rounded-lg"
                         title="Delete account"
-                        onClick={void onDelete}
+                        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                        onClick={onDelete}
                     >
-                        <MdOutlineDelete size={25} color="white"/>
+                        <MdOutlineDelete size={25} color="white" />
                     </button>
                 </div>
             </div>
             <div className="bg-secondary h-1 w-full mt-1"></div>
-            <TransactionLogList account={account}/>
+            <TransactionLogList account={account} />
         </section>
     )
 }

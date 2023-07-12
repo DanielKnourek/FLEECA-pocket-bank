@@ -69,7 +69,8 @@ const MakeTransactionForm = () => {
         <section className=""
         >
             <form className="flex flex-col bg-primary rounded-t-xl rounded-b-xl m-2 p-2"
-                onSubmit={void handleSubmit(processTransactionSubmit)}
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                onSubmit={handleSubmit(processTransactionSubmit)}
             >
                 <div className="my-2 w-full flex flex-col">
                     <div>

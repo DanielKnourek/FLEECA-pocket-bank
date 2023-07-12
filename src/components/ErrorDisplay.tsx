@@ -12,8 +12,13 @@ const ErrorDisplay: React.FC<ErrorDisplayParams> = ({ ...params }) => {
 
 const AccessDenied = () => {
     return (<>
-    To view this page you need to signIn.
-        <button onClick={() => void signIn()}>SignIn</button>
+        To view this page you need to signIn.
+        <button
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            onClick={() => signIn()}
+        >
+            SignIn
+        </button>
         {/* <button onClick={() => signIn('discord', {redirect: false})}>SignIn</button> */}
     </>)
 }

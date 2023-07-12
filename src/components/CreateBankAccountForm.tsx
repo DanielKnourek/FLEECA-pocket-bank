@@ -54,7 +54,8 @@ const CreateBankAccountForm = () => {
             title="Create new bank account."
         >
             <form className="flex flex-col bg-primary rounded-t-xl rounded-b-xl m-2"
-                onSubmit={void handleSubmit(createBankAccountSubmit)}
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                onSubmit={handleSubmit(createBankAccountSubmit)}
             >
                 <div className="p-2 w-full flex flex-col">
                     <div>

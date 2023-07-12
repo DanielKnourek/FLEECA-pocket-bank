@@ -38,7 +38,8 @@ const UserAccount: NextPage = () => {
             <div className="w-full p-2 flex place-content-center">
 
                 <form className="flex flex-col bg-primary w-full sm:w-1/2 rounded-t-xl rounded-b-xl m-2"
-                    onSubmit={void handleSubmit(createUserSubmit)}
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    onSubmit={handleSubmit(createUserSubmit)}
                 >
                     <div className="p-2 w-full flex flex-col">
                         <div>
