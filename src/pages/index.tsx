@@ -38,6 +38,7 @@ const Home: NextPage = () => {
             </h3>
             {user.status == 'authenticated' &&
               <button className="bg-secondary rounded-full p-2 px-4 border-secondary border-4 hover:bg-primary"
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={() => router.push('/account')}
               >
                 Continue to your account.
@@ -46,6 +47,7 @@ const Home: NextPage = () => {
             {
               user.status != 'authenticated' &&
               <button className="bg-secondary rounded-full p-2 px-4 border-secondary border-4 hover:bg-primary"
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={() => signIn()}
                 disabled={user.status == 'loading'}
                 data-testid='btn-home-signin'
@@ -60,7 +62,7 @@ const Home: NextPage = () => {
             <h3>Discover the Future of Banking with FLEECA Pocket Bank!</h3>
 
             <p>
-              Why settle for traditional banking when you can experience the ultimate convenience and control with FLEECA Pocket Bank's innovative web platform? Here's why thousands of individuals are choosing us as their preferred financial partner:
+              Why settle for traditional banking when you can experience the ultimate convenience and control with FLEECA Pocket Bank&apos;s innovative web platform? Here&apos;s why thousands of individuals are choosing us as their preferred financial partner:
             </p>
 
             <ol className="list-decimal list-inside flex flex-row space-4 flex-wrap items-stretch w-auto justify-center marker:text-2xl">
@@ -80,7 +82,7 @@ const Home: NextPage = () => {
               <li className="bg-secondary p-2 m-2 rounded-lg max-w-sm">
                 User-Friendly Interface
                 <p>
-                  Our web platform is designed with simplicity in mind. Whether you're a tech-savvy individual or just starting your financial journey, our intuitive interface makes it easy to navigate through various banking services and features. Enjoy a seamless and enjoyable banking experience.
+                  Our web platform is designed with simplicity in mind. Whether you&apos;re a tech-savvy individual or just starting your financial journey, our intuitive interface makes it easy to navigate through various banking services and features. Enjoy a seamless and enjoyable banking experience.
                 </p>
               </li>
             </ol>
