@@ -25,7 +25,9 @@ const NavbarIcon = ({ text, link, icon }: NavbarIconParams) => {
 
     return (
         <Link className={`m-1 p-4 text-white group hover:bg-primary h-full items-center justify-center flex ${pathname == link ? 'bg-primary' : ''}`}
-            href={link}>
+            href={link}
+            data-testid={`nav-${text}`}
+            >
             {icon}
             <span className="sidebar-tooltip group-hover:scale-100">
                 {text}

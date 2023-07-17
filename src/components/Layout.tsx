@@ -29,12 +29,14 @@ type AppLayoutParams = {
 }
 const AppLayout = ({ children }: AppLayoutParams) => {
 
-  return (<>
-    <Navbar />
-    <main className="p-4">
-      {children}
-    </main>
-  </>)
+  return (<div
+      className="h-screen"
+    >
+      <Navbar />
+      <main className="p-4 h-max">
+        {children}
+      </main>
+    </div>)
 }
 
 const ProtectedAppLayout = ({ children }: AppLayoutParams) => {
