@@ -8,9 +8,9 @@ const Navbar = () => {
     return (
         <div className="h-16 w-full">
             <nav className="fixed flex flex-row w-screen top-0 h-16 bg-secondary items-center justify-center">
-                <NavbarIcon text="Home" link={'/'} icon={<HiOutlineHome size={28} />} />
-                <NavbarIcon text="Account" link={'/account'} icon={<HiOutlineUser size={28} />} />
-                <NavbarIcon text="ATM" link={'/account/atm'} icon={<MdAtm size={42} />} />
+                <NavbarIcon text="Home" link={'/'} icon={<HiOutlineHome className="group-hover:text-secondary" size={28} />} />
+                <NavbarIcon text="Account" link={'/account'} icon={<HiOutlineUser className="group-hover:text-secondary" size={28} />} />
+                <NavbarIcon text="ATM" link={'/account/atm'} icon={<MdAtm className="group-hover:text-secondary" size={42} />} />
             </nav>
         </div>
     )
