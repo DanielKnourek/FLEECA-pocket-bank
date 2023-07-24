@@ -51,9 +51,9 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
 
     if (direction == 'incoming') {
         return (
-            <span className="grid grid-cols-10 border-b-secondary border-b-4 items-center">
+            <span className="grid grid-cols-11 border-b-secondary border-b-4 items-center">
                 <MdAddCircleOutline color="green" />
-                <div className="w-16">
+                <div className="w-16 col-span-2">
                     {Number(data.receiver_payment_ammount).toFixed(2)}
                 </div>
                 <div className="w-1 bg-secondary h-full"></div>
@@ -67,9 +67,9 @@ const TransactionLog = ({ data, direction }: TransactionLogParams) => {
         )
     }
     return (
-        <span className="grid grid-cols-10 border-b-secondary border-b-4 items-center">
+        <span className="grid grid-cols-11 border-b-secondary border-b-4 items-center">
             <MdOutlineIndeterminateCheckBox color="red" />
-            <div className="w-16">
+                <div className="w-16 col-span-2">
                 {Number(data.sender_payment_ammount).toFixed(2)}
             </div>
             <div className="w-1 bg-secondary h-full"></div>

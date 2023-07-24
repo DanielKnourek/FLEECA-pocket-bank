@@ -7,10 +7,13 @@ import { MdOutlineDelete } from "react-icons/md";
 const BankAccountList = () => {
     const Accounts = api.bankAccount.listOwnerBankAccounts.useQuery(undefined, { staleTime: 5 * 60 * 1000 });
     return (
-        <section className="p-1"
+        <section className="p-1 flex flex-wrap place-content-evenly border-secondary border-4 rounded-xl"
         >
-            List of your accounts
+            <h3 className="flex place-items-center place-content-center w-[calc(100%+1rem)] md:max-w-[56rem] md:flex-1 md:min-w-[28rem] bg-secondary md:m-2 -ml-2 -mt-2 -mr-2 rounded-xl p-2 text-white font-bold">
+                List of your accounts
+            </h3>
             {Accounts.data && Accounts.data.map(account => <BankAccount account={account} key={account.id} />)}
+            <div className="flex-grow md:p-2 md:m-2"></div>
         </section>
     )
 }
@@ -26,9 +29,9 @@ const BankAccount = ({ account }: BankAccountParams) => {
     }
 
     return (
-        <section className="flex flex-col bg-primary rounded-t-xl rounded-b-xl m-2 p-2"
+        // <section className="w-fullbg-primary rounded-t-xl rounded-b-xl m-2 p-2 md:grid-cols-2 max-w-lg"
+        <section className="w-full md:max-w-[56rem] md:flex-1 md:min-w-[28rem] bg-primary rounded-t-xl rounded-b-xl m-2 p-2"
             title={`Bank Account ${account.currency_code}`}
-        // id={`${account.bank_account_id}`}
         >
             <div className="flex flex-row grow">
                 <div className="flex flex-col">
