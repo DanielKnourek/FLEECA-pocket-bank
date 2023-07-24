@@ -1,0 +1,43 @@
+{
+  "ts-node": {
+    "require": [ "tsconfig-paths/register" ],
+    "files": true,
+  },
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "moduleResolution": "nodenext",
+    
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@/pages/*": [
+        "src/pages/*"
+      ],
+      "@/utils/*": [
+        "src/utils/*"
+      ],
+      "@/server/*": [
+        "src/server/*"
+      ],
+      "@/types/*": [
+        "src/types/*"
+      ],
+      "@/components/*": [
+        "src/components/*"
+      ],
+    },
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.cjs",
+    "**/*.mjs"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  
+}
