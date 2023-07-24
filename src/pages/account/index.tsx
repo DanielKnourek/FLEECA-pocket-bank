@@ -12,7 +12,6 @@ const UserAccount: NextPage = () => {
 
     return (
         <Layout requireSession={true}>
-            private User Account
             <BankAccountList />
             <MakeTransactionForm />
             <CreateBankAccountForm />
