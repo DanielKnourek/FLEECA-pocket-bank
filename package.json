@@ -61,6 +61,7 @@
     "jsdom": "^22.0.0",
     "kysely-codegen": "^0.10.0",
     "kysely-neon": "1.0.2",
+    "next-router-mock": "^0.9.7",
     "pg": "^8.11.0",
     "postcss": "^8.4.21",
     "prettier": "^2.8.8",
